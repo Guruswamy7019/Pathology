@@ -1,4 +1,4 @@
-export default function ResultEntryView() {
+function ResultEntryView() {
   return (
     <section className="menu-page-card">
       <h3>Result Entry List ()</h3>
@@ -6,3 +6,4 @@ export default function ResultEntryView() {
     </section>
   );
 }
+export default ResultEntryView;

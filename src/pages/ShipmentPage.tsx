@@ -1,5 +1,7 @@
 import ShipmentView from "../components/Shipment/ShipmentView";
 
-export default function ShipmentPage() {
+function ShipmentPage() {
   return <ShipmentView />;
 }
+
+export default ShipmentPage;

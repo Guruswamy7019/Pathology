@@ -1,4 +1,4 @@
-export default function ShipmentView() {
+function ShipmentView() {
   return (
     <section className="menu-page-card">
       <h3>Specimen List ()</h3>
@@ -6,3 +6,4 @@ export default function ShipmentView() {
     </section>
   );
 }
+export default ShipmentView;

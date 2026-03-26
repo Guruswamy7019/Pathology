@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+import { Fragment, Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import MainLayout from "./src/components/Layout/MainLayout";
 import { PATHOLOGY_MENU } from "./src/config/sidebar.menu";
@@ -13,15 +13,31 @@ function AppRouter() {
       <Route path="/" element={<Navigate to="/pathology/orders" replace />} />
       <Route element={<MainLayout />}>
         {PATHOLOGY_MENU.map((item) => (
-          <Route
-            key={item.key}
-            path={item.path}
-            element={
-              <Suspense fallback={pageFallback}>
-                <item.page />
-              </Suspense>
-            }
-          />
+          <Fragment key={item.key}>
+            <Route
+              path={item.path}
+              element={
+                item.subMenu && item.subMenu.length > 0 ? (
+                  <Navigate to={item.subMenu[0].path} replace />
+                ) : (
+                  <Suspense fallback={pageFallback}>
+                    <item.page />
+                  </Suspense>
+                )
+              }
+            />
+            {item.subMenu?.map((subItem) => (
+              <Route
+                key={subItem.key}
+                path={subItem.path}
+                element={
+                  <Suspense fallback={pageFallback}>
+                    <subItem.page />
+                  </Suspense>
+                }
+              />
+            ))}
+          </Fragment>
         ))}
         <Route path="*" element={<Navigate to="/pathology/orders" replace />} />
       </Route>

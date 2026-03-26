@@ -1,5 +1,7 @@
 import ConfigurationView from "../components/Configuration/ConfigurationView";
 
-export default function ConfigurationPage() {
+function ConfigurationPage() {
   return <ConfigurationView />;
 }
+
+export default ConfigurationPage;

@@ -1,5 +1,7 @@
 import AuthorizationView from "../components/Authorization/AuthorizationView";
 
-export default function AuthorizationPage() {
+function AuthorizationPage() {
   return <AuthorizationView />;
 }
+
+export default AuthorizationPage;

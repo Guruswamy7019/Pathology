@@ -1,5 +1,7 @@
 import ResultEntryView from "../components/ResultEntry/ResultEntryView";
 
-export default function ResultEntryPage() {
+function ResultEntryPage() {
   return <ResultEntryView />;
 }
+
+export default ResultEntryPage;

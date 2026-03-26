@@ -1,5 +1,7 @@
 import ReceiveView from "../components/Recieve/ReceiveView";
 
-export default function ReceivePage() {
+function ReceivePage() {
   return <ReceiveView />;
 }
+
+export default ReceivePage;
