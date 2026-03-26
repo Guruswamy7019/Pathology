@@ -1,4 +1,4 @@
-export default function ConfigurationView() {
+function ConfigurationView() {
   return (
     <section className="menu-page-card">
       <h2>Configuration</h2>
@@ -6,3 +6,6 @@ export default function ConfigurationView() {
     </section>
   );
 }
+
+export default ConfigurationView;
+

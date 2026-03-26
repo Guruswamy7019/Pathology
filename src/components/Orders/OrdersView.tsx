@@ -1,4 +1,4 @@
-export default function OrdersView() {
+function OrdersView() {
   return (
     <section className="menu-page-card">
       <h3>List of Work Orders ()</h3>
@@ -6,3 +6,5 @@ export default function OrdersView() {
     </section>
   );
 }
+
+export default OrdersView;

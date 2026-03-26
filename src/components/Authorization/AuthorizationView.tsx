@@ -1,4 +1,4 @@
-export default function AuthorizationView() {
+function AuthorizationView() {
   return (
     <section className="menu-page-card">
       <h2>Authorization</h2>
@@ -6,3 +6,6 @@ export default function AuthorizationView() {
     </section>
   );
 }
+
+export default AuthorizationView;
+

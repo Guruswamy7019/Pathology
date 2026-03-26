@@ -29,6 +29,7 @@ export default function Sidebar({
       variant="permanent"
       sx={{
         width: sidebarWidth,
+        fontFamily: "Montserrat, sans-serif",
         flexShrink: 0,
         "& .MuiDrawer-paper": {
           width: sidebarWidth,
@@ -71,34 +72,71 @@ export default function Sidebar({
 
                 <List sx={{ mt: 0.75, pl: 0.75 }}>
                   {tab.menu.map((item) => {
-                    const isActive = location.pathname === item.path;
+                    const isActive =
+                      location.pathname === item.path ||
+                      location.pathname.startsWith(`${item.path}/`);
                     return (
-                      <ListItemButton
-                        key={item.key}
-                        onClick={() => navigate(item.path)}
-                        sx={{
-                          pl: 2.5,
-                          pr: 1,
-                          py: 0.75,
-                          borderRadius: "8px",
-                          mb: 0.25,
-                          bgcolor: isActive ? "transparent" : "transparent",
-                          "&:hover": {
-                            bgcolor: isActive
-                              ? "transparent"
-                              : "rgba(0,0,0,0.04)",
-                          },
-                        }}
-                      >
-                        <ListItemText
-                          primary={item.label}
-                          primaryTypographyProps={{
-                            fontSize: "0.875rem",
-                            fontWeight: isActive ? 600 : 400,
-                            color: isActive ? "#232323" : "#9e9e9e",
+                      <Box key={item.key}>
+                        <ListItemButton
+                          onClick={() => navigate(item.path)}
+                          sx={{
+                            pl: 2.5,
+                            pr: 1,
+                            py: 0.75,
+                            borderRadius: "8px",
+                            mb: 0.25,
+                            bgcolor: "transparent",
+                            "&:hover": {
+                              bgcolor: isActive
+                                ? "transparent"
+                                : "rgba(0,0,0,0.04)",
+                            },
                           }}
-                        />
-                      </ListItemButton>
+                        >
+                          <ListItemText
+                            primary={item.label}
+                            primaryTypographyProps={{
+                              fontSize: "0.875rem",
+                              fontWeight: isActive ? 600 : 400,
+                              color: isActive ? "#232323" : "#9e9e9e",
+                            }}
+                          />
+                        </ListItemButton>
+
+                        {isActive &&
+                          item.subMenu &&
+                          item.subMenu.length > 0 && (
+                            <List className={styles.configSubmenuList}>
+                              {item.subMenu.map((subItem) => {
+                                const isSubActive =
+                                  location.pathname === subItem.path;
+                                return (
+                                  <ListItemButton
+                                    key={subItem.key}
+                                    onClick={() => navigate(subItem.path)}
+                                    className={styles.configSubmenuItem}
+                                  >
+                                    <Box
+                                      className={`${styles.radioDot} ${
+                                        isSubActive ? styles.radioDotActive : ""
+                                      }`}
+                                    />
+                                    <ListItemText
+                                      primary={subItem.label}
+                                      primaryTypographyProps={{
+                                        fontSize: "0.9rem",
+                                        fontWeight: isSubActive ? 500 : 400,
+                                        color: isSubActive
+                                          ? "#E17E61"
+                                          : "#232323",
+                                      }}
+                                    />
+                                  </ListItemButton>
+                                );
+                              })}
+                            </List>
+                          )}
+                      </Box>
                     );
                   })}
                 </List>
@@ -112,7 +150,10 @@ export default function Sidebar({
               alt="Vidai logo"
               className={styles.footerLogo}
             />
-            <Typography variant="caption" sx={{ mt: -4, mb:2, color: "#9e9e9e" }}>
+            <Typography
+              variant="caption"
+              sx={{ mt: -4, mb: 2, color: "#9e9e9e" }}
+            >
               Updated Version 2.0
             </Typography>
           </Box>

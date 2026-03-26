@@ -46,6 +46,44 @@ export const PATHOLOGY_MENU: MenuItem[] = [
     label: "Configuration",
     path: "/pathology/configuration",
     page: lazy(() => import("../pages/ConfigurationPage")),
+    subMenu: [
+      {
+        key: "sample-and-tube",
+        label: "Sample & Tube",
+        path: "/pathology/configuration/sample-and-tube",
+        page: lazy(
+          () =>
+            import("../components/Configuration/SampleAndTube/SampleAndTube"),
+        ),
+      },
+      {
+        key: "test",
+        label: "Test",
+        path: "/pathology/configuration/test",
+        page: lazy(() => import("../components/Configuration/Test/Test")),
+      },
+      {
+        key: "machine",
+        label: "Machine",
+        path: "/pathology/configuration/machine",
+        page: lazy(() => import("../components/Configuration/Machine/Machine")),
+      },
+      {
+        key: "agency",
+        label: "Agency",
+        path: "/pathology/configuration/agency",
+        page: lazy(() => import("../components/Configuration/Agency/Agency")),
+      },
+      {
+        key: "pathology-profile",
+        label: "Pathology Profile",
+        path: "/pathology/configuration/pathology-profile",
+        page: lazy(
+          () =>
+            import("../components/Configuration/PathologyProfile/PathologyProfile"),
+        ),
+      },
+    ],
   },
 ];
 
