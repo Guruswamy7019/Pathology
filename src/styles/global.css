@@ -1,0 +1,143 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: #f6f6f7;
+  color: #1f1f1f;
+}
+
+.dashboard-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: 100vh;
+}
+
+.pathology-sidebar {
+  padding: 20px;
+  background: #f3f3f3;
+  border-right: 1px solid #e3e3e3;
+}
+
+.pathology-brand {
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 18px;
+  color: #414141;
+}
+
+.pathology-menu-card {
+  background: #efefef;
+  border-radius: 12px;
+  padding: 16px 12px;
+}
+
+.pathology-menu-title {
+  color: #e17e61;
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+
+.pathology-menu-item {
+  display: block;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  padding: 10px 8px;
+  border-radius: 8px;
+  color: #8a8a8a;
+  cursor: pointer;
+}
+
+.pathology-menu-item.active {
+  color: #212121;
+  background: #ffffff;
+  font-weight: 600;
+}
+
+.main-shell {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.pathology-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 28px;
+  border-bottom: 1px solid #e8e8e8;
+  background: #fff;
+}
+
+.pathology-breadcrumb {
+  font-size: 14px;
+  color: #6d6d6d;
+  margin: 0 0 4px;
+}
+
+.pathology-title {
+  font-size: 24px;
+  margin: 0;
+}
+
+.pathology-header-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #5a5a5a;
+  font-size: 14px;
+}
+
+.pathology-user-chip {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: #e07f61;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.content-shell {
+  padding: 24px 28px;
+}
+
+.menu-page-card {
+  background: #fff;
+  border: 1px solid #ececec;
+  border-radius: 14px;
+  padding: 24px;
+  min-height: 220px;
+}
+
+.menu-page-card h2 {
+  margin: 0 0 10px;
+}
+
+.menu-page-card p {
+  margin: 0;
+  color: #606060;
+}
+
+@media (max-width: 960px) {
+  .dashboard-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .pathology-sidebar {
+    border-right: 0;
+    border-bottom: 1px solid #e5e5e5;
+  }
+
+  .pathology-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
