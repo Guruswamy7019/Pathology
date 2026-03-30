@@ -1,9 +1,3 @@
-
-
-function ConfigurationView() {
-
-
-
 import { useState } from "react";
 import TabsHeader from "./Test/CommonComponents/TabsHeader/TabsHeader";
 import PageToolbar from "./Test/CommonComponents/PageToolbar/PageToolbar";
