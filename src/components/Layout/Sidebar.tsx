@@ -155,7 +155,7 @@ export default function Sidebar({
             />
             <Typography
               variant="caption"
-              sx={{ mt: -4, mb: 2, color: "#9e9e9e" }}
+              sx={{ mt: -1, mb: 2, color: "#9e9e9e" }}
             >
               Updated Version 2.0
             </Typography>
