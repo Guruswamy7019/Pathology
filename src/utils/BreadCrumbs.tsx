@@ -19,29 +19,29 @@ const allMenus = [
 export const DynamicBreadcrumbs = () => {
   const location = useLocation();
   const { id } = useParams<{ id: string }>(); // 👈 get id from route
-  const [leadName, setLeadName] = React.useState<string>(""); // 👈 store lead name
+  const [leadName] = React.useState<string>(""); // 👈 store lead name
 
   const pathnames = location.pathname.split("/").filter(Boolean);
 
   // 👇 Fetch lead name if id exists
-// 👇 Fetch lead name ONLY for Leads module (skip Tickets and others)
-// React.useEffect(() => {
-//   if (!id) return;
+  // 👇 Fetch lead name ONLY for Leads module (skip Tickets and others)
+  // React.useEffect(() => {
+  //   if (!id) return;
 
-//   // 🚫 Skip API call when we are inside Tickets module
-//   if (location.pathname.includes("/settings/tickets")) {
-//     return;
-//   }
+  //   // 🚫 Skip API call when we are inside Tickets module
+  //   if (location.pathname.includes("/settings/tickets")) {
+  //     return;
+  //   }
 
-//   // ✅ Existing behaviour for Leads stays untouched
-//   LeadAPI.getById(id)
-//     .then((lead) => {
-//       setLeadName(lead.full_name);
-//     })
-//     .catch(() => {
-//       setLeadName("");
-//     });
-// }, [id, location.pathname]);
+  //   // ✅ Existing behaviour for Leads stays untouched
+  //   LeadAPI.getById(id)
+  //     .then((lead) => {
+  //       setLeadName(lead.full_name);
+  //     })
+  //     .catch(() => {
+  //       setLeadName("");
+  //     });
+  // }, [id, location.pathname]);
 
   // Custom SVG separator
   const separator = (
@@ -84,8 +84,7 @@ export const DynamicBreadcrumbs = () => {
 
   // Combine fixed + dynamic, but skip duplicates
   const breadcrumbs = [...fixedCrumbs, ...dynamicCrumbs].filter(
-    (crumb, index, arr) =>
-      index === 0 || crumb.label !== arr[index - 1].label,
+    (crumb, index, arr) => index === 0 || crumb.label !== arr[index - 1].label,
   );
 
   return (
@@ -94,11 +93,7 @@ export const DynamicBreadcrumbs = () => {
         const isLast = idx === breadcrumbs.length - 1;
 
         return isLast ? (
-          <Typography
-            key={crumb.path}
-            fontWeight={700}
-            color="text.primary"
-          >
+          <Typography key={crumb.path} fontWeight={700} color="text.primary">
             {crumb.label}
           </Typography>
         ) : (

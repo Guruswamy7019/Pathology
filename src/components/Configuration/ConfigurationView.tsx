@@ -1,13 +1,16 @@
 
+
 function ConfigurationView() {
 
+
+
 import { useState } from "react";
-import TabsHeader from "./test/CommonComponents/TabsHeader/TabsHeader";
-import PageToolbar from "./test/CommonComponents/PageToolbar/PageToolbar";
-import ParameterTable from "./test/ParameterMaster/ParameterTable";
-import CategoryTable from "./test/CategoryMaster/CategoryTable";
-import TestTable from "./test/TestMaster/TestTable";
-import TemplateTable from "./test/TemplateMaster/TemplateTable";
+import TabsHeader from "./Test/CommonComponents/TabsHeader/TabsHeader";
+import PageToolbar from "./Test/CommonComponents/PageToolbar/PageToolbar";
+import ParameterTable from "./Test/ParameterMaster/ParameterTable";
+import CategoryTable from "./Test/CategoryMaster/CategoryTable";
+import TestTable from "./Test/TestMaster/TestTable";
+import TemplateTable from "./Test/TemplateMaster/TemplateTable";
 import styles from "./ConfigurationView.module.css";
 
 const tabs = ["Parameter", "Category", "Test", "Template"];
@@ -41,7 +44,7 @@ const toolbarConfig: Record<string, ToolbarConfig> = {
   },
 };
 
-export default function ConfigurationView() {
+function ConfigurationView() {
   const [activeTab, setActiveTab] = useState("Parameter");
 
   const renderTable = () => {
@@ -82,4 +85,3 @@ export default function ConfigurationView() {
 }
 
 export default ConfigurationView;
-

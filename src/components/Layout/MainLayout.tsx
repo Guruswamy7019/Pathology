@@ -6,7 +6,7 @@ import ClinicLogoLMS from "../../assets/icons/Clinic-Logo-LMS.svg";
 import styles from "../../styles/sidebar.module.css";
 
 const Header = lazy(() => import("./Header"));
-// const Sidebar = lazy(() => import("./Sidebar"));
+const Sidebar = lazy(() => import("./Sidebar"));
 const TOP_ROW_HEIGHT = 88;
 const SIDEBAR_WIDTH = 250;
 
@@ -55,7 +55,7 @@ const MainLayout = () => {
         <Suspense
           fallback={<Box sx={{ width: SIDEBAR_WIDTH, bgcolor: "#f3f3f3" }} />}
         >
-          {/* <Sidebar topOffset={TOP_ROW_HEIGHT} sidebarWidth={SIDEBAR_WIDTH} /> */}
+          <Sidebar topOffset={TOP_ROW_HEIGHT} sidebarWidth={SIDEBAR_WIDTH} />
         </Suspense>
         <Box
           sx={{
@@ -66,7 +66,10 @@ const MainLayout = () => {
             overflow: "hidden",
           }}
         >
-          <Box className={styles.cardWrapper} sx={{ m: 0, pb: 2 }}>
+          <Box
+            className={`${styles.cardWrapper} ${styles.contentCardWrapper}`}
+            sx={{ m: 0 }}
+          >
             <Box
               className={styles.card}
               sx={{

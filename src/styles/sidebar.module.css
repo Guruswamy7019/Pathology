@@ -8,11 +8,19 @@
 }
 
 .cardWrapper {
-  /* flex: 1; */
   padding: 0 24px 24px 0;
+  box-sizing: border-box;
   overflow: hidden;
-   flex: 1;          /* add — fills remaining height in parent */
+  flex: 1;
   min-height: 0;
+}
+
+.contentCardWrapper {
+  padding: 0 24px 24px 0;
+}
+
+.sidebarCardWrapper {
+  padding: 0 16px 16px 16px;
 }
 
 .card {
@@ -20,8 +28,8 @@
   height: 100%;
   max-width: 1566px;
   margin-left: auto;
-  border-top-right-radius: 20px;
-  border-top-left-radius: 20px;
+  border-radius: 20px;
+  border: 1px solid #ececec;
   background: #ffffff;
   display: flex;
   flex-direction: column;
@@ -113,12 +121,12 @@
   position: relative;
   z-index: 1;
   flex-shrink: 0;
-  padding: 8px 12px 12px;
+  padding: 12px 16px 16px;
 }
 
 .footerLogo {
   width: 100%;
   max-width: 164px;
   height: auto;
-  margin-bottom: 40px;
+  margin-bottom: 12px;
 }

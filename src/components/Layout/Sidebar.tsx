@@ -42,7 +42,10 @@ export default function Sidebar({
         },
       }}
     >
-      <Box className={styles.cardWrapper} sx={{ height: "100%" }}>
+      <Box
+        className={`${styles.cardWrapper} ${styles.sidebarCardWrapper}`}
+        sx={{ height: "100%" }}
+      >
         <Box className={styles.card} sx={{ height: "100%", p: 0 }}>
           <img
             src={dashboardCardBg}

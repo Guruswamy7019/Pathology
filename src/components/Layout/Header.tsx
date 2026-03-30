@@ -29,6 +29,23 @@ type HeaderUser = {
   designation_label: string;
 };
 
+const getActiveMenuLabel = (pathname: string) => {
+  for (const item of PATHOLOGY_MENU) {
+    if (item.path === pathname) {
+      return item.label;
+    }
+
+    const activeSubMenu = item.subMenu?.find(
+      (subItem) => subItem.path === pathname,
+    );
+    if (activeSubMenu) {
+      return activeSubMenu.label;
+    }
+  }
+
+  return "Orders";
+};
+
 const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -41,9 +58,7 @@ const Header = () => {
     { clinic_id: 1, clinic__name: "Crysta IVF, Banglore", is_default: true },
   ];
   const selectedClinic = clinics.find((c) => c.is_default) || clinics[0];
-  const activeMenuLabel =
-    PATHOLOGY_MENU.find((item) => item.path === location.pathname)?.label ||
-    "Orders";
+  const activeMenuLabel = getActiveMenuLabel(location.pathname);
   const [clinicAnchor, setClinicAnchor] = useState<null | HTMLElement>(null);
 
   const handleClinicOpen = (e: React.MouseEvent<HTMLElement>) =>
