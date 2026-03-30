@@ -8,7 +8,8 @@ import styles from "../../styles/sidebar.module.css";
 const Header = lazy(() => import("./Header"));
 const Sidebar = lazy(() => import("./Sidebar"));
 const TOP_ROW_HEIGHT = 88;
-const SIDEBAR_WIDTH = 250;
+// Sidebar width scales: 200px on small screens up to 260px on xlarge
+const SIDEBAR_WIDTH = { xs: 200, sm: 210, md: 230, lg: 250, xl: 260 };
 
 const MainLayout = () => {
   return (
@@ -29,7 +30,13 @@ const MainLayout = () => {
           bgcolor: "#f3f3f3",
         }}
       >
-        <Box sx={{ width: SIDEBAR_WIDTH, pl: "24px", py: "14px" }}>
+        <Box
+          sx={{
+            width: SIDEBAR_WIDTH,
+            pl: { xs: "12px", md: "16px", lg: "24px" },
+            py: "14px",
+          }}
+        >
           <img
             src={ClinicLogoLMS}
             width={134}
@@ -38,7 +45,11 @@ const MainLayout = () => {
           />
         </Box>
         <Box sx={{ flexGrow: 1, minWidth: 0 }}>
-          <Suspense fallback={<Box sx={{ height: 88, bgcolor: "#f3f3f3" }} />}>
+          <Suspense
+            fallback={
+              <Box sx={{ height: TOP_ROW_HEIGHT, bgcolor: "#f3f3f3" }} />
+            }
+          >
             <Header />
           </Suspense>
         </Box>
@@ -53,7 +64,11 @@ const MainLayout = () => {
         }}
       >
         <Suspense
-          fallback={<Box sx={{ width: SIDEBAR_WIDTH, bgcolor: "#f3f3f3" }} />}
+          fallback={
+            <Box
+              sx={{ width: SIDEBAR_WIDTH, flexShrink: 0, bgcolor: "#f3f3f3" }}
+            />
+          }
         >
           <Sidebar topOffset={TOP_ROW_HEIGHT} sidebarWidth={SIDEBAR_WIDTH} />
         </Suspense>

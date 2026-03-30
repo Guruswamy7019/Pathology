@@ -14,12 +14,12 @@ import vidaiLogo from "../../assets/icons/Vidai-logo.svg";
 
 type SidebarProps = {
   topOffset?: number;
-  sidebarWidth?: number;
+  sidebarWidth?: number | Record<string, number>;
 };
 
 export default function Sidebar({
   topOffset = 88,
-  sidebarWidth = 300,
+  sidebarWidth = 250,
 }: SidebarProps) {
   const navigate = useNavigate();
   const location = useLocation();
