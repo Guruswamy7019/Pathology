@@ -8,16 +8,20 @@
 }
 
 .cardWrapper {
-  flex: 1;
-  padding: 2px 10px 10px;
+  /* flex: 1; */
+  padding: 0 24px 24px 0;
   overflow: hidden;
+   flex: 1;          /* add — fills remaining height in parent */
+  min-height: 0;
 }
 
 .card {
   position: relative;
   height: 100%;
-  border-radius: 16px;
-  padding: 16px;
+  max-width: 1566px;
+  margin-left: auto;
+  border-top-right-radius: 20px;
+  border-top-left-radius: 20px;
   background: #ffffff;
   display: flex;
   flex-direction: column;

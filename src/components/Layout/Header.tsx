@@ -1,3 +1,5 @@
+import ArrowIcon from "../../assets/icons/Down.svg";
+
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
@@ -53,9 +55,7 @@ const Header = () => {
 
   /* ================= ICON MENU STATE ================= */
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [activeMenu, setActiveMenu] = useState<
-    "calendar" | null
-  >(null);
+  const [activeMenu, setActiveMenu] = useState<"calendar" | null>(null);
 
   const handleIconClick = (
     event: React.MouseEvent<HTMLElement>,
@@ -79,9 +79,7 @@ const Header = () => {
     navigate("/login", { replace: true });
   };
 
-  const iconMenus = [
-    { icon: CalendarIcon, type: "calendar" },
-  ] as const;
+  const iconMenus = [{ icon: CalendarIcon, type: "calendar" }] as const;
 
   return (
     <AppBar
@@ -96,14 +94,16 @@ const Header = () => {
     >
       <Toolbar sx={{ justifyContent: "space-between", py: 2 }}>
         {/* LEFT: Breadcrumbs */}
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1.25 }}>
-          <Typography sx={{ color: "#666", fontSize: 14 }}>Lab</Typography>
-          <Typography sx={{ color: "#8a8a8a", fontSize: 14 }}>&gt;</Typography>
-          <Typography sx={{ color: "#666", fontSize: 14 }}>
-            Pathology
-          </Typography>
-          <Typography sx={{ color: "#8a8a8a", fontSize: 14 }}>&gt;</Typography>
-          <Typography sx={{ color: "#1f1f1f", fontSize: 14, fontWeight: 700 }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          <Typography sx={{ color: "#666" }}>Lab</Typography>
+
+          <Box component="img" src={ArrowIcon} sx={{ width: 12, height: 12 }} />
+
+          <Typography sx={{ color: "#666" }}>Pathology</Typography>
+
+          <Box component="img" src={ArrowIcon} sx={{ width: 12, height: 12 }} />
+
+          <Typography sx={{ color: "#1f1f1f", fontSize: 18, fontWeight: 700 }}>
             {activeMenuLabel}
           </Typography>
         </Box>

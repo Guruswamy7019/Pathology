@@ -7,7 +7,7 @@ import {
   RISK_MENU,
   COMPLIANCE_MENU,
 } from "../config/sidebar.menu";
-import { LeadAPI } from "../services/leads.api";
+// import { LeadAPI } from "../services/leads.api";
 
 const allMenus = [
   ...LEADS_MENU,
@@ -25,23 +25,23 @@ export const DynamicBreadcrumbs = () => {
 
   // 👇 Fetch lead name if id exists
 // 👇 Fetch lead name ONLY for Leads module (skip Tickets and others)
-React.useEffect(() => {
-  if (!id) return;
+// React.useEffect(() => {
+//   if (!id) return;
 
-  // 🚫 Skip API call when we are inside Tickets module
-  if (location.pathname.includes("/settings/tickets")) {
-    return;
-  }
+//   // 🚫 Skip API call when we are inside Tickets module
+//   if (location.pathname.includes("/settings/tickets")) {
+//     return;
+//   }
 
-  // ✅ Existing behaviour for Leads stays untouched
-  LeadAPI.getById(id)
-    .then((lead) => {
-      setLeadName(lead.full_name);
-    })
-    .catch(() => {
-      setLeadName("");
-    });
-}, [id, location.pathname]);
+//   // ✅ Existing behaviour for Leads stays untouched
+//   LeadAPI.getById(id)
+//     .then((lead) => {
+//       setLeadName(lead.full_name);
+//     })
+//     .catch(() => {
+//       setLeadName("");
+//     });
+// }, [id, location.pathname]);
 
   // Custom SVG separator
   const separator = (
