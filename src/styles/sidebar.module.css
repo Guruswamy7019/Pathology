@@ -8,7 +8,8 @@
 }
 
 .cardWrapper {
-  padding: 0 24px 24px 0;
+  /* base: overflow + flex; padding supplied by content/sidebar subclasses */
+  padding: 0;
   box-sizing: border-box;
   overflow: hidden;
   flex: 1;
@@ -16,11 +17,13 @@
 }
 
 .contentCardWrapper {
-  padding: 0 24px 24px 0;
+  /* Right/bottom gap scales: 12px on small → 24px on large */
+  padding: 0 clamp(12px, 1.8vw, 24px) clamp(12px, 1.8vw, 24px) 0;
 }
 
 .sidebarCardWrapper {
-  padding: 0 16px 16px 16px;
+  /* All-sides gap scales: 8px small → 16px large */
+  padding: 0 clamp(8px, 1.2vw, 16px) clamp(8px, 1.2vw, 16px) clamp(8px, 1.2vw, 16px);
 }
 
 .card {
