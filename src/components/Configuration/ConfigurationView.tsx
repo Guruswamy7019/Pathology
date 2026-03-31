@@ -10,29 +10,29 @@ import styles from "./ConfigurationView.module.css";
 const tabs = ["Parameter", "Category", "Test", "Template"];
 
 type ToolbarConfig = {
-  title: string;
+  title: (count: number) => string;
   searchPlaceholder: string;
   createLabel: string;
 };
 
 const toolbarConfig: Record<string, ToolbarConfig> = {
   Parameter: {
-    title: "List of Parameters (9)",
+    title: (count) => `List of Parameters (${count})`,
     searchPlaceholder: "Search by Parameter Code / Name / Print Name / Unit",
     createLabel: "Create New Parameter",
   },
   Category: {
-    title: "List of Categories (9)",
+    title: (count) => `List of Categories (${count})`,
     searchPlaceholder: "Search by Category Code / Name",
     createLabel: "Create New Category",
   },
   Test: {
-    title: "List of Tests (9)",
+    title: (count) => `List of Tests (${count})`,
     searchPlaceholder: "Search by Test Code / Name",
     createLabel: "Create New Test",
   },
   Template: {
-    title: "List of Templates (9)",
+    title: (count) => `List of Templates (${count})`,
     searchPlaceholder: "Search by Template Code / Name",
     createLabel: "Create New Template",
   },
@@ -40,37 +40,47 @@ const toolbarConfig: Record<string, ToolbarConfig> = {
 
 function ConfigurationView() {
   const [activeTab, setActiveTab] = useState("Parameter");
+  const [dataCount, setDataCount] = useState(0);
+
+  const handleTabChange = (tab: string) => {
+    setDataCount(0);
+    setActiveTab(tab);
+  };
 
   const renderTable = () => {
     switch (activeTab) {
       case "Parameter":
-        return <ParameterTable />;
+        return <ParameterTable onCountChange={setDataCount} />;
       case "Category":
-        return <CategoryTable />;
+        return <CategoryTable onCountChange={setDataCount} />;
       case "Test":
-        return <TestTable />;
+        return <TestTable onCountChange={setDataCount} />;
       case "Template":
-        return <TemplateTable />;
+        return <TemplateTable onCountChange={setDataCount} />;
       default:
-        return <ParameterTable />;
+        return <ParameterTable onCountChange={setDataCount} />;
     }
   };
 
 
   return (
-    <div style={{ width: "100%", height: "100%" }}>
+    <div
+      style={{ width: "100%", height: "100%", position: "absolute", inset: 0 }}
+    >
       <div className={styles.contentContainer}>
         <TabsHeader
           tabs={tabs}
           activeTab={activeTab}
-          setActiveTab={setActiveTab}
+          setActiveTab={handleTabChange}
         />
         <PageToolbar
-          title={toolbarConfig[activeTab].title}
+          title={toolbarConfig[activeTab].title(dataCount)}
           searchPlaceholder={toolbarConfig[activeTab].searchPlaceholder}
           createLabel={toolbarConfig[activeTab].createLabel}
           onSearch={(val) => console.log("search:", val)}
           onAdd={() => console.log("add:", activeTab)}
+          showFilter={activeTab === "Template"}
+          onFilter={() => console.log("filter")}
         />
         {renderTable()}
       </div>

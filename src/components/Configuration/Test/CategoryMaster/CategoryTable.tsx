@@ -1,13 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import EditIcon from "../../../../assets/icons/edit.svg";
-import Toggle from "../CommonComponents/Toggle/Toggle";
-import DataTable, { Column } from "../CommonComponents/DataTable/DataTable";
+import DataTable, {
+  Column,
+  Toggle,
+} from "../CommonComponents/DataTable/DataTable";
 
 type CategoryRow = {
   code: string;
   name: string;
   tests: number;
   status: boolean;
+};
+
+type CategoryTableProps = {
+  onCountChange?: (count: number) => void;
 };
 
 const initialData: CategoryRow[] = [
@@ -20,11 +26,19 @@ const initialData: CategoryRow[] = [
   { code: "CT-007", name: "Biochemistry", tests: 9, status: true },
   { code: "CT-008", name: "Biochemistry", tests: 9, status: true },
   { code: "CT-009", name: "Biochemistry", tests: 9, status: true },
-  // add more rows...
+  { code: "CT-010", name: "Biochemistry", tests: 9, status: true },
+  { code: "CT-011", name: "Biochemistry", tests: 9, status: true },
+  { code: "CT-012", name: "Biochemistry", tests: 9, status: true },
+  { code: "CT-013", name: "Biochemistry", tests: 9, status: true },
+  { code: "CT-014", name: "Biochemistry", tests: 9, status: true },
 ];
 
-export default function CategoryTable() {
+export default function CategoryTable({ onCountChange }: CategoryTableProps) {
   const [data, setData] = useState<CategoryRow[]>(initialData);
+
+  useEffect(() => {
+    onCountChange?.(data.length);
+  }, [data, onCountChange]);
 
   const handleToggle = (code: string) => {
     setData((prev) =>
@@ -61,7 +75,7 @@ export default function CategoryTable() {
             cursor: "pointer",
           }}
         >
-          <img src={EditIcon} alt="" width={24} height={24} />
+          <img src={EditIcon} alt="" width={20} height={20} />
         </button>
       ),
     },

@@ -1,7 +1,9 @@
-import { useState } from "react";
-import DataTable, { Column } from "../CommonComponents/DataTable/DataTable";
+import { useState, useEffect } from "react";
+import DataTable, {
+  Column,
+  Toggle,
+} from "../CommonComponents/DataTable/DataTable";
 import EditIcon from "../../../../assets/icons/edit.svg";
-import Toggle from "../CommonComponents/Toggle/Toggle";
 
 type TestRow = {
   code: string;
@@ -10,6 +12,10 @@ type TestRow = {
   category: string;
   parameterCount: number;
   status: boolean;
+};
+
+type TestTableProps = {
+  onCountChange?: (count: number) => void;
 };
 
 const initialData: TestRow[] = [
@@ -70,7 +76,7 @@ const initialData: TestRow[] = [
     status: false,
   },
   {
-    code: "TN-0414823",
+    code: "TN-041483",
     name: "CBC",
     printName: "Full Blood Analysis",
     category: "Biochemistry",
@@ -78,7 +84,39 @@ const initialData: TestRow[] = [
     status: false,
   },
   {
-    code: "TN-041923",
+    code: "TN-041924",
+    name: "CBC",
+    printName: "Full Blood Analysis",
+    category: "Biochemistry",
+    parameterCount: 6,
+    status: false,
+  },
+  {
+    code: "TN-041925",
+    name: "CBC",
+    printName: "Full Blood Analysis",
+    category: "Biochemistry",
+    parameterCount: 6,
+    status: false,
+  },
+  {
+    code: "TN-041926",
+    name: "CBC",
+    printName: "Full Blood Analysis",
+    category: "Biochemistry",
+    parameterCount: 6,
+    status: false,
+  },
+  {
+    code: "TN-041927",
+    name: "CBC",
+    printName: "Full Blood Analysis",
+    category: "Biochemistry",
+    parameterCount: 6,
+    status: false,
+  },
+  {
+    code: "TN-041928",
     name: "CBC",
     printName: "Full Blood Analysis",
     category: "Biochemistry",
@@ -87,8 +125,12 @@ const initialData: TestRow[] = [
   },
 ];
 
-export default function TestTable() {
+export default function TestTable({ onCountChange }: TestTableProps) {
   const [data, setData] = useState<TestRow[]>(initialData);
+
+  useEffect(() => {
+    onCountChange?.(data.length);
+  }, [data, onCountChange]);
 
   const handleToggle = (code: string) => {
     setData((prev) =>
@@ -127,7 +169,7 @@ export default function TestTable() {
             cursor: "pointer",
           }}
         >
-          <img src={EditIcon} alt="" width={24} height={24} />
+          <img src={EditIcon} alt="" width={20} height={20} />
         </button>
       ),
     },

@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import EditIcon from "../../../../assets/icons/edit.svg";
-import Toggle from "../CommonComponents/Toggle/Toggle";
-import DataTable, { Column } from "../CommonComponents/DataTable/DataTable";
+import DataTable, {
+  Column,
+  Toggle,
+} from "../CommonComponents/DataTable/DataTable";
 
 type ParameterRow = {
   code: string;
@@ -9,6 +11,10 @@ type ParameterRow = {
   printName: string;
   unit: string;
   status: boolean;
+};
+
+type ParameterTableProps = {
+  onCountChange?: (count: number) => void;
 };
 
 const initialData: ParameterRow[] = [
@@ -89,10 +95,49 @@ const initialData: ParameterRow[] = [
     unit: "mg/dL",
     status: false,
   },
+  {
+    code: "TN-041432",
+    name: "CBC",
+    printName: "Complete Blood Count",
+    unit: "mg/dL",
+    status: false,
+  },
+  {
+    code: "TN-041433",
+    name: "CBC",
+    printName: "Complete Blood Count",
+    unit: "mg/dL",
+    status: false,
+  },
+  {
+    code: "TN-041434",
+    name: "CBC",
+    printName: "Complete Blood Count",
+    unit: "mg/dL",
+    status: false,
+  },
+  {
+    code: "TN-041435",
+    name: "CBC",
+    printName: "Complete Blood Count",
+    unit: "mg/dL",
+    status: false,
+  },
+  {
+    code: "TN-041436",
+    name: "CBC",
+    printName: "Complete Blood Count",
+    unit: "mg/dL",
+    status: false,
+  },
 ];
 
-export default function ParameterTable() {
+export default function ParameterTable({ onCountChange }: ParameterTableProps) {
   const [data, setData] = useState<ParameterRow[]>(initialData);
+
+  useEffect(() => {
+    onCountChange?.(data.length);
+  }, [data, onCountChange]);
 
   const handleToggle = (code: string) => {
     setData((prev) =>
@@ -135,11 +180,11 @@ export default function ParameterTable() {
             cursor: "pointer",
           }}
         >
-          <img src={EditIcon} alt="" width={24} height={24} />
+          <img src={EditIcon} alt="" width={20} height={20} />
         </button>
       ),
     },
   ];
 
-  return <DataTable columns={columns} data={data} itemsPerPage={9} />;
+  return <DataTable columns={columns} data={data} />;
 }

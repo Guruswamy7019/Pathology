@@ -1,7 +1,9 @@
-import { useState } from "react";
-import DataTable, { Column } from "../CommonComponents/DataTable/DataTable";
+import { useState, useEffect } from "react";
+import DataTable, {
+  Column,
+  Toggle,
+} from "../CommonComponents/DataTable/DataTable";
 import EditIcon from "../../../../assets/icons/edit.svg";
-import Toggle from "../CommonComponents/Toggle/Toggle";
 
 type TemplateRow = {
   code: string;
@@ -9,6 +11,10 @@ type TemplateRow = {
   noOfPathologists: number;
   gender: string;
   status: boolean;
+};
+
+type TemplateTableProps = {
+  onCountChange?: (count: number) => void;
 };
 
 const initialData: TemplateRow[] = [
@@ -75,10 +81,42 @@ const initialData: TemplateRow[] = [
     gender: "Male",
     status: true,
   },
+  {
+    code: "TM-010",
+    name: "Template C",
+    noOfPathologists: 2,
+    gender: "Male",
+    status: true,
+  },
+  {
+    code: "TM-011",
+    name: "Template C",
+    noOfPathologists: 2,
+    gender: "Male",
+    status: true,
+  },
+  {
+    code: "TM-012",
+    name: "Template C",
+    noOfPathologists: 2,
+    gender: "Male",
+    status: true,
+  },
+  {
+    code: "TM-013",
+    name: "Template C",
+    noOfPathologists: 2,
+    gender: "Male",
+    status: true,
+  },
 ];
 
-export default function TemplateTable() {
+export default function TemplateTable({ onCountChange }: TemplateTableProps) {
   const [data, setData] = useState<TemplateRow[]>(initialData);
+
+  useEffect(() => {
+    onCountChange?.(data.length);
+  }, [data, onCountChange]);
 
   const handleToggle = (code: string) => {
     setData((prev) =>
@@ -116,7 +154,7 @@ export default function TemplateTable() {
             cursor: "pointer",
           }}
         >
-          <img src={EditIcon} alt="" width={24} height={24} />
+          <img src={EditIcon} alt="" width={20} height={20} />
         </button>
       ),
     },
