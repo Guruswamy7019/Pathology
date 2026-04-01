@@ -1,7 +1,0 @@
-.contentContainer {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  overflow: hidden;
-  font-size: clamp(12px, 1.2vh, 16px); /* scaling root for this section */
-}

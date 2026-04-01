@@ -37,4 +37,9 @@ export const EXTRA_ROUTES: ExtraRoute[] = [
     path: "/pathology/configuration",
     page: lazy(() => import("../pages/ConfigurationPage")),
   },
+  {
+  key: "parameter-create",
+  path: "/pathology/configuration/test/parameter/create",
+  page: lazy(() => import("../components/Configuration/Test/ParameterMaster/CreateParameterPage")),
+},
 ];

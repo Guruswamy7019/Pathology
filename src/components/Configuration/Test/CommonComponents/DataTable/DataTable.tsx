@@ -95,7 +95,7 @@ export function PageToolbar({
         </div>
         {showFilter && (
           <button className={tableStyles.filterBtn} onClick={onFilter}>
-            <img src={FunnelIcon} alt="filter" width={15} height={15} />
+            <img src={FunnelIcon} alt="filter" width={30} height={30} />
           </button>
         )}
         <button className={tableStyles.createBtn} onClick={onAdd}>

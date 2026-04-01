@@ -29,7 +29,7 @@
 .card {
   position: relative;
   height: 100%;
-  max-width: 1566px;
+  width: 100%;
   margin-left: auto;
   border-radius: 20px;
   border: 1px solid #ececec;
