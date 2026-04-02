@@ -1,0 +1,896 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import styles from "./CreateParameterPage.module.css";
+import EditIcon from "../../../../assets/icons/edit.svg";
+import BackIcon from "../../../../assets/icons/back_icon.svg";
+
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+type ReferenceRange = {
+  id: number;
+  category: string;
+  machine: string;
+  minRef: string;
+  maxRef: string;
+  minAuthZ: string;
+  maxAuthZ: string;
+  isAgeApplicable: boolean;
+  ageLowerLimit: string;
+  ageUpperLimit: string;
+  improbableValue1: string;
+  improbableValue2: string;
+  isReflex: boolean;
+  reflexValue1: string;
+  reflexValue2: string;
+  panicValue1: string;
+  panicValue2: string;
+  varyingRefRanges: string;
+  notes: string;
+};
+
+type FormState = {
+  parameterCode: string;
+  parameterName: string;
+  parameterPrintName: string;
+  typeOfValue: "Numeric" | "Text";
+  isSkipNumeric: boolean;
+  parameterUnit: string;
+  deltaCheckPercentage: string;
+  techniqueUsed: string;
+  executionCalendarLinking: string;
+};
+
+// ─── Initial Data ─────────────────────────────────────────────────────────────
+
+const initialRanges: ReferenceRange[] = [
+  {
+    id: 1,
+    category: "Male",
+    machine: "COBAS C311 - Clinical Chemistry",
+    minRef: "0.09",
+    maxRef: "0.3",
+    minAuthZ: "0.09",
+    maxAuthZ: "0.3",
+    isAgeApplicable: true,
+    ageLowerLimit: "0",
+    ageUpperLimit: "0",
+    improbableValue1: "0",
+    improbableValue2: "0",
+    isReflex: true,
+    reflexValue1: "0",
+    reflexValue2: "0",
+    panicValue1: "0",
+    panicValue2: "0",
+    varyingRefRanges: "Female : 12-16.1 g/dL\nNewborn : 14-22.0 g/dL",
+    notes:
+      "A partial deletion in the AZFc region is identified, which may be associated with impaired sperm production and infertility.",
+  },
+  {
+    id: 2,
+    category: "Female",
+    machine: "COBAS C311 - Clinical Chemistry",
+    minRef: "0.09",
+    maxRef: "0.3",
+    minAuthZ: "0.09",
+    maxAuthZ: "0.3",
+    isAgeApplicable: true,
+    ageLowerLimit: "0",
+    ageUpperLimit: "0",
+    improbableValue1: "0",
+    improbableValue2: "0",
+    isReflex: false,
+    reflexValue1: "0",
+    reflexValue2: "0",
+    panicValue1: "0",
+    panicValue2: "0",
+    varyingRefRanges: "Female : 12-16.1 g/dL\nNewborn : 14-22.0 g/dL",
+    notes:
+      "A partial deletion in the AZFc region is identified, which may be associated with impaired sperm production and infertility.",
+  },
+];
+
+const UNITS = ["ML", "g/dL", "mg/dL", "mmol/L", "IU/L", "U/L"];
+const CATEGORIES = ["Male", "Female", "Both", "Pediatric"];
+const MACHINES = [
+  "COBAS C311 - Clinical Chemistry",
+  "Sysmex XN-1000",
+  "Beckman Coulter",
+];
+const CALENDAR_OPTIONS = ["Lorem Ipsum", "Option 2", "Option 3"];
+const FORMULA_PARAMS = ["Sample Value 1", "Sample Value 2", "Sample Value 3"];
+
+// ─── Floating-label field helpers ─────────────────────────────────────────────
+
+function FloatInput({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+}) {
+  return (
+    <div className={styles.formGroup}>
+      <div className={styles.fieldBorder}>
+        <span className={styles.floatLabel}>{label}</span>
+        <input
+          className={styles.floatInput}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+        />
+      </div>
+    </div>
+  );
+}
+
+function FloatSelect({
+  label,
+  value,
+  options,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  options: string[];
+  onChange: (v: string) => void;
+}) {
+  return (
+    <div className={styles.formGroup}>
+      <div className={styles.fieldBorder}>
+        <span className={styles.floatLabel}>{label}</span>
+        <select
+          className={styles.floatSelect}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+        >
+          {options.map((o) => (
+            <option key={o}>{o}</option>
+          ))}
+        </select>
+      </div>
+    </div>
+  );
+}
+
+// ─── Component ────────────────────────────────────────────────────────────────
+
+export default function CreateParameterPage() {
+  const navigate = useNavigate();
+
+  const [form, setForm] = useState<FormState>({
+    parameterCode: "AG-4512",
+    parameterName: "CBC",
+    parameterPrintName: "Complete Blood Count",
+    typeOfValue: "Numeric",
+    isSkipNumeric: true,
+    parameterUnit: "ML",
+    deltaCheckPercentage: "20.50",
+    techniqueUsed: "Lorem Ipsum",
+    executionCalendarLinking: "Lorem Ipsum",
+  });
+
+  const [ranges, setRanges] = useState<ReferenceRange[]>(initialRanges);
+  const [editingRange, setEditingRange] = useState<ReferenceRange | null>(null);
+  const [nextId, setNextId] = useState(3);
+
+  // Formula state
+  const [formulaParam1, setFormulaParam1] = useState("Sample Value 1");
+  const [formulaParam2, setFormulaParam2] = useState("Sample Value 2");
+
+  const handleFormChange = (
+    field: keyof FormState,
+    value: string | boolean,
+  ) => {
+    setForm((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleDeleteRange = (id: number) => {
+    setRanges((prev) => prev.filter((r) => r.id !== id));
+  };
+
+  const handleAddRange = () => {
+    const newRange: ReferenceRange = {
+      id: nextId,
+      category: "Male",
+      machine: MACHINES[0],
+      minRef: "0",
+      maxRef: "0",
+      minAuthZ: "0",
+      maxAuthZ: "0",
+      isAgeApplicable: false,
+      ageLowerLimit: "0",
+      ageUpperLimit: "0",
+      improbableValue1: "0",
+      improbableValue2: "0",
+      isReflex: false,
+      reflexValue1: "0",
+      reflexValue2: "0",
+      panicValue1: "0",
+      panicValue2: "0",
+      varyingRefRanges: "",
+      notes: "",
+    };
+
+    setEditingRange(newRange);
+  };
+
+  const handleEditRange = (range: ReferenceRange) => {
+    setEditingRange({ ...range });
+  };
+
+  const handleSaveRange = () => {
+    if (!editingRange) return;
+
+    const alreadyExists = ranges.some((r) => r.id === editingRange.id);
+
+    if (alreadyExists) {
+      setRanges((prev) =>
+        prev.map((r) => (r.id === editingRange.id ? editingRange : r)),
+      );
+    } else {
+      setRanges((prev) => [...prev, editingRange]);
+      setNextId((n) => n + 1);
+    }
+
+    setEditingRange(null);
+  };
+
+  const handleSave = () => {
+    console.log("Save:", { form, ranges });
+    navigate("/pathology/configuration/test");
+  };
+
+  const handleCancel = () => {
+    navigate("/pathology/configuration/test");
+  };
+
+  return (
+    <div className={styles.page}>
+      <div className={styles.card}>
+        {/* ── Header ──────────────────────────────────────────────────────── */}
+        <div className={styles.header}>
+          <button className={styles.backBtn} onClick={handleCancel}>
+            <img src={BackIcon} alt="back" className={styles.backIcon} />
+          </button>
+          <h2 className={styles.pageTitle}>Create New Parameter</h2>
+        </div>
+
+        <div className={styles.content}>
+          {/* ── Basic Details ──────────────────────────────────────────────── */}
+          <div className={styles.section}>
+            <p className={styles.sectionTitle}>Basic Details</p>
+
+            {/* Row 1 – 4 cols */}
+            <div className={styles.formGrid}>
+              <FloatInput
+                label="Parameter Code"
+                value={form.parameterCode}
+                onChange={(v) => handleFormChange("parameterCode", v)}
+              />
+              <FloatInput
+                label="Parameter Name"
+                value={form.parameterName}
+                onChange={(v) => handleFormChange("parameterName", v)}
+              />
+              <FloatInput
+                label="Parameter Print Name"
+                value={form.parameterPrintName}
+                onChange={(v) => handleFormChange("parameterPrintName", v)}
+              />
+
+              {/* Type of Value — floating-label radio box */}
+              <div className={styles.formGroup}>
+                <div className={styles.radioFieldBorder}>
+                  <span className={styles.radioFloatLabel}>Type Of Value</span>
+                  <label className={styles.radioLabel}>
+                    <input
+                      type="radio"
+                      name="typeOfValue"
+                      value="Numeric"
+                      checked={form.typeOfValue === "Numeric"}
+                      onChange={() =>
+                        handleFormChange("typeOfValue", "Numeric")
+                      }
+                    />
+                    Numeric
+                  </label>
+                  <label className={styles.radioLabel}>
+                    <input
+                      type="radio"
+                      name="typeOfValue"
+                      value="Text"
+                      checked={form.typeOfValue === "Text"}
+                      onChange={() => handleFormChange("typeOfValue", "Text")}
+                    />
+                    Text
+                  </label>
+                </div>
+              </div>
+
+              {/* Row 2 — checkbox + 3 fields */}
+              {/* Is Skip Numeric */}
+              <div className={styles.formGroup}>
+                <label className={styles.checkboxLabel}>
+                  <input
+                    type="checkbox"
+                    checked={form.isSkipNumeric}
+                    onChange={(e) =>
+                      handleFormChange("isSkipNumeric", e.target.checked)
+                    }
+                  />
+                  Is Skip Numeric Result Entry
+                </label>
+              </div>
+
+              <FloatSelect
+                label="Parameter Unit"
+                value={form.parameterUnit}
+                options={UNITS}
+                onChange={(v) => handleFormChange("parameterUnit", v)}
+              />
+
+              {/* Delta Check — floating-label number */}
+              <div className={styles.formGroup}>
+                <div className={styles.numberFieldBorder}>
+                  <span className={styles.numberFloatLabel}>
+                    Delta Check Percentage (%)
+                  </span>
+                  <input
+                    type="number"
+                    className={styles.floatNumberInput}
+                    value={form.deltaCheckPercentage}
+                    onChange={(e) =>
+                      handleFormChange("deltaCheckPercentage", e.target.value)
+                    }
+                  />
+                  <div className={styles.numberControls}>
+                    <button
+                      className={styles.numberBtn}
+                      onClick={() =>
+                        handleFormChange(
+                          "deltaCheckPercentage",
+                          String(
+                            parseFloat(form.deltaCheckPercentage || "0") + 0.5,
+                          ),
+                        )
+                      }
+                    >
+                      ▲
+                    </button>
+                    <button
+                      className={styles.numberBtn}
+                      onClick={() =>
+                        handleFormChange(
+                          "deltaCheckPercentage",
+                          String(
+                            parseFloat(form.deltaCheckPercentage || "0") - 0.5,
+                          ),
+                        )
+                      }
+                    >
+                      ▼
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <FloatInput
+                label="Technique Used"
+                value={form.techniqueUsed}
+                onChange={(v) => handleFormChange("techniqueUsed", v)}
+              />
+
+              {/* Row 3 — Execution Calendar */}
+              <FloatSelect
+                label="Execution Calendar Linking"
+                value={form.executionCalendarLinking}
+                options={CALENDAR_OPTIONS}
+                onChange={(v) =>
+                  handleFormChange("executionCalendarLinking", v)
+                }
+              />
+            </div>
+          </div>
+
+          {/* ── Reference Ranges ──────────────────────────────────────────── */}
+          <div className={styles.section}>
+            <div className={styles.refRangesHeader}>
+              <p className={styles.sectionTitle}>Reference Ranges</p>
+              <button className={styles.addRangeBtn} onClick={handleAddRange}>
+                + Add New Reference Ranges
+              </button>
+            </div>
+
+            <div className={styles.refTableWrapper}>
+              <table className={styles.refTable}>
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>Category</th>
+                    <th>Machine</th>
+                    <th>Min. Ref.</th>
+                    <th>Max. Ref.</th>
+                    <th>Min. AuthZ</th>
+                    <th>Max. AuthZ</th>
+                    <th>Is Age Applicable</th>
+                    <th>Age - Lower Limit</th>
+                    <th>Age - Upper Limit</th>
+                    <th>Improbable Value 1</th>
+                    <th>Improbable Value 2</th>
+                    <th>Is Reflex</th>
+                    <th>Reflex Value 1</th>
+                    <th>Reflex Value 2</th>
+                    <th>Panic Value 1</th>
+                    <th>Panic Value 2</th>
+                    <th>Varying Ref. Ranges</th>
+                    <th>Notes</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {ranges.map((row) => (
+                    <tr key={row.id}>
+                      {/* Sticky delete */}
+                      <td>
+                        <button
+                          className={styles.deleteBtn}
+                          onClick={() => handleDeleteRange(row.id)}
+                        >
+                          ✕
+                        </button>
+                      </td>
+                      <td>{row.category}</td>
+                      <td>{row.machine}</td>
+                      <td>{row.minRef}</td>
+                      <td>{row.maxRef}</td>
+                      <td>{row.minAuthZ}</td>
+                      <td>{row.maxAuthZ}</td>
+                      <td>
+                        {row.isAgeApplicable && (
+                          <span className={styles.checkIcon}>✓</span>
+                        )}
+                      </td>
+                      <td>{row.ageLowerLimit}</td>
+                      <td>{row.ageUpperLimit}</td>
+                      <td>{row.improbableValue1}</td>
+                      <td>{row.improbableValue2}</td>
+                      <td>
+                        {row.isReflex && (
+                          <span className={styles.checkIcon}>✓</span>
+                        )}
+                      </td>
+                      <td>{row.reflexValue1}</td>
+                      <td>{row.reflexValue2}</td>
+                      <td>{row.panicValue1}</td>
+                      <td>{row.panicValue2}</td>
+                      <td
+                        style={{
+                          maxWidth: "160px",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }}
+                      >
+                        {row.varyingRefRanges.split("\n")[0]}
+                        {row.varyingRefRanges.includes("\n") && "…"}
+                      </td>
+                      <td
+                        style={{
+                          maxWidth: "180px",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                        }}
+                      >
+                        {row.notes.length > 40
+                          ? row.notes.slice(0, 40) + "…"
+                          : row.notes}
+                      </td>
+                      {/* Sticky edit */}
+                      <td>
+                        <button
+                          className={styles.editRowBtn}
+                          onClick={() => handleEditRange(row)}
+                        >
+                          <img
+                            src={EditIcon}
+                            alt="edit"
+                            width={16}
+                            height={16}
+                          />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* ── Formula ───────────────────────────────────────────────────── */}
+          <div className={styles.section}>
+            <p className={styles.sectionTitle}>Formula</p>
+            <div className={styles.formulaBox}>
+              {/* LEFT — live expression */}
+              <div className={styles.formulaInner}>
+                <div className={styles.formulaExpression}>
+                  <span className={styles.formulaText}>(</span>
+                  <select
+                    className={styles.formulaSelect}
+                    value={formulaParam1}
+                    onChange={(e) => setFormulaParam1(e.target.value)}
+                  >
+                    {FORMULA_PARAMS.map((p) => (
+                      <option key={p}>{p}</option>
+                    ))}
+                  </select>
+                  <span className={styles.formulaOperator}>+</span>
+                  <select
+                    className={styles.formulaSelect}
+                    value={formulaParam2}
+                    onChange={(e) => setFormulaParam2(e.target.value)}
+                  >
+                    {FORMULA_PARAMS.map((p) => (
+                      <option key={p}>{p}</option>
+                    ))}
+                  </select>
+                  <span className={styles.formulaText}>)</span>
+                  <span className={styles.formulaOperator}>/</span>
+                  <span className={styles.formulaText}>100</span>
+                </div>
+              </div>
+              {/* Vertical divider */}
+              <div className={styles.formulaDivider} />
+              {/* RIGHT — operator palette + action buttons */}
+              <div className={styles.formulaControls}>
+                {/* Row 1: ( ) + - * | Validate */}
+                <div className={styles.formulaRow}>
+                  {["(", ")", "+", "-", "*"].map((op) => (
+                    <button key={op} className={styles.formulaBtn}>
+                      {op}
+                    </button>
+                  ))}
+                  <button className={styles.validateBtn}>
+                    Validate Formula
+                  </button>
+                </div>
+                {/* Row 2: / 0 | Add Parameter | Clear All */}
+                <div className={styles.formulaRow}>
+                  {["/", "0"].map((op) => (
+                    <button key={op} className={styles.formulaBtn}>
+                      {op}
+                    </button>
+                  ))}
+                  <button className={styles.addParamBtn}>Add Parameter</button>
+                  <button className={styles.clearBtn}>Clear All</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Footer ──────────────────────────────────────────────────────── */}
+        <div className={styles.footerActions}>
+          <button className={styles.cancelBtn} onClick={handleCancel}>
+            Cancel
+          </button>
+          <button className={styles.saveBtn} onClick={handleSave}>
+            Save
+          </button>
+        </div>
+      </div>
+
+      {/* ── Side Panel ────────────────────────────────────────────────────── */}
+      {editingRange && (
+        <div className={styles.overlay} onClick={() => setEditingRange(null)}>
+          <div
+            className={styles.sidePanel}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className={styles.sidePanelHeader}>
+              <h3 className={styles.sidePanelTitle}>
+                Add New Reference Ranges & Rules
+              </h3>
+              <button
+                className={styles.closeBtn}
+                onClick={() => setEditingRange(null)}
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className={styles.sidePanelContent}>
+              {/* Category & Machine */}
+              <div className={styles.sidePanelGrid}>
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>Category</label>
+                  <select
+                    className={styles.select}
+                    value={editingRange.category}
+                    onChange={(e) =>
+                      setEditingRange({
+                        ...editingRange,
+                        category: e.target.value,
+                      })
+                    }
+                  >
+                    {CATEGORIES.map((c) => (
+                      <option key={c}>{c}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>Machine</label>
+                  <select
+                    className={styles.select}
+                    value={editingRange.machine}
+                    onChange={(e) =>
+                      setEditingRange({
+                        ...editingRange,
+                        machine: e.target.value,
+                      })
+                    }
+                  >
+                    {MACHINES.map((m) => (
+                      <option key={m}>{m}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* Min/Max Ref */}
+              <div className={styles.sidePanelGrid}>
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>Min. Ref.</label>
+                  <input
+                    className={styles.input}
+                    value={editingRange.minRef}
+                    onChange={(e) =>
+                      setEditingRange({
+                        ...editingRange,
+                        minRef: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>Max. Ref.</label>
+                  <input
+                    className={styles.input}
+                    value={editingRange.maxRef}
+                    onChange={(e) =>
+                      setEditingRange({
+                        ...editingRange,
+                        maxRef: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>Min. AuthZ</label>
+                  <input
+                    className={styles.input}
+                    value={editingRange.minAuthZ}
+                    onChange={(e) =>
+                      setEditingRange({
+                        ...editingRange,
+                        minAuthZ: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>Max. AuthZ</label>
+                  <input
+                    className={styles.input}
+                    value={editingRange.maxAuthZ}
+                    onChange={(e) =>
+                      setEditingRange({
+                        ...editingRange,
+                        maxAuthZ: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+              </div>
+
+              {/* Is Age Applicable */}
+              <label className={styles.checkboxLabel}>
+                <input
+                  type="checkbox"
+                  checked={editingRange.isAgeApplicable}
+                  onChange={(e) =>
+                    setEditingRange({
+                      ...editingRange,
+                      isAgeApplicable: e.target.checked,
+                    })
+                  }
+                />
+                Is Age Applicable
+              </label>
+
+              {/* Age Limits */}
+              <div className={styles.sidePanelGrid}>
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>Age - Lower Limit</label>
+                  <input
+                    className={styles.input}
+                    value={editingRange.ageLowerLimit}
+                    onChange={(e) =>
+                      setEditingRange({
+                        ...editingRange,
+                        ageLowerLimit: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>Age - Upper Limit</label>
+                  <input
+                    className={styles.input}
+                    value={editingRange.ageUpperLimit}
+                    onChange={(e) =>
+                      setEditingRange({
+                        ...editingRange,
+                        ageUpperLimit: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+              </div>
+
+              {/* Improbable Values */}
+              <div className={styles.sidePanelGrid}>
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>Improbable Value 1</label>
+                  <input
+                    className={styles.input}
+                    value={editingRange.improbableValue1}
+                    onChange={(e) =>
+                      setEditingRange({
+                        ...editingRange,
+                        improbableValue1: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>Improbable Value 2</label>
+                  <input
+                    className={styles.input}
+                    value={editingRange.improbableValue2}
+                    onChange={(e) =>
+                      setEditingRange({
+                        ...editingRange,
+                        improbableValue2: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+              </div>
+
+              <div className={styles.divider} />
+
+              {/* Is Reflex */}
+              <label className={styles.checkboxLabel}>
+                <input
+                  type="checkbox"
+                  checked={editingRange.isReflex}
+                  onChange={(e) =>
+                    setEditingRange({
+                      ...editingRange,
+                      isReflex: e.target.checked,
+                    })
+                  }
+                />
+                Is Reflex
+              </label>
+
+              {/* Reflex Values */}
+              <div className={styles.sidePanelGrid}>
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>Reflex Value 1</label>
+                  <input
+                    className={styles.input}
+                    value={editingRange.reflexValue1}
+                    onChange={(e) =>
+                      setEditingRange({
+                        ...editingRange,
+                        reflexValue1: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>Reflex Value 2</label>
+                  <input
+                    className={styles.input}
+                    value={editingRange.reflexValue2}
+                    onChange={(e) =>
+                      setEditingRange({
+                        ...editingRange,
+                        reflexValue2: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+              </div>
+
+              {/* Panic Values */}
+              <div className={styles.sidePanelGrid}>
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>Panic Value 1</label>
+                  <input
+                    className={styles.input}
+                    value={editingRange.panicValue1}
+                    onChange={(e) =>
+                      setEditingRange({
+                        ...editingRange,
+                        panicValue1: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div className={styles.formGroup}>
+                  <label className={styles.label}>Panic Value 2</label>
+                  <input
+                    className={styles.input}
+                    value={editingRange.panicValue2}
+                    onChange={(e) =>
+                      setEditingRange({
+                        ...editingRange,
+                        panicValue2: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+              </div>
+
+              <div className={styles.divider} />
+
+              {/* Varying Ref Ranges */}
+              <div className={styles.formGroup}>
+                <label className={styles.label}>Varying Ref. Ranges</label>
+                <textarea
+                  className={styles.input}
+                  style={{ height: "5em", resize: "none", paddingTop: "0.5em" }}
+                  value={editingRange.varyingRefRanges}
+                  onChange={(e) =>
+                    setEditingRange({
+                      ...editingRange,
+                      varyingRefRanges: e.target.value,
+                    })
+                  }
+                />
+              </div>
+
+              {/* Notes */}
+              <div className={styles.formGroup}>
+                <label className={styles.label}>Notes</label>
+                <textarea
+                  className={styles.input}
+                  style={{ height: "5em", resize: "none", paddingTop: "0.5em" }}
+                  value={editingRange.notes}
+                  onChange={(e) =>
+                    setEditingRange({ ...editingRange, notes: e.target.value })
+                  }
+                />
+              </div>
+            </div>
+
+            <div className={styles.sidePanelFooter}>
+              <button
+                className={styles.cancelBtn}
+                onClick={() => setEditingRange(null)}
+              >
+                Cancel
+              </button>
+              <button className={styles.saveBtn} onClick={handleSaveRange}>
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

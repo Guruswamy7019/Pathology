@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import DataTable, {
-  Column,
-  Toggle,
+import {
   TabsHeader,
   PageToolbar,
 } from "./CommonComponents/DataTable/DataTable";
@@ -27,25 +25,25 @@ const toolbarConfig: Record<string, ToolbarConfig> = {
     title: (count) => `List of Parameters (${count})`,
     searchPlaceholder: "Search by Parameter Code / Name / Print Name / Unit",
     createLabel: "Create New Parameter",
-    createPath: "/pathology/configuration/parameter/create",
+    createPath: "/pathology/configuration/test/parameter/create",
   },
   Category: {
     title: (count) => `List of Categories (${count})`,
     searchPlaceholder: "Search by Category Code / Name",
     createLabel: "Create New Category",
-    createPath: "/pathology/configuration/category/create",
+    createPath: "/pathology/configuration/test/category/create",
   },
   Test: {
     title: (count) => `List of Tests (${count})`,
     searchPlaceholder: "Search by Test Code / Name",
     createLabel: "Create New Test",
-    createPath: "/pathology/configuration/test/create",
+    createPath: "/pathology/configuration/test/new-test/create",
   },
   Template: {
     title: (count) => `List of Templates (${count})`,
     searchPlaceholder: "Search by Template Code / Name",
     createLabel: "Create New Template",
-    createPath: "/pathology/configuration/template/create",
+    createPath: "/pathology/configuration/test/template/create",
   },
 };
 
@@ -55,7 +53,7 @@ function TestConfigurationView() {
   const navigate = useNavigate();
 
   const handleTabChange = (tab: string) => {
-    setDataCount(0);
+    if (tab === activeTab) return;
     setActiveTab(tab);
   };
 
@@ -88,7 +86,7 @@ function TestConfigurationView() {
           title={toolbarConfig[activeTab].title(dataCount)}
           searchPlaceholder={toolbarConfig[activeTab].searchPlaceholder}
           createLabel={toolbarConfig[activeTab].createLabel}
-          onSearch={(val) => console.log("search:", val)}
+          onSearch={(val: string) => console.log("search:", val)}
           onAdd={() => navigate(toolbarConfig[activeTab].createPath)}
           showFilter={activeTab === "Template"}
           onFilter={() => console.log("filter")}

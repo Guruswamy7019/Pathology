@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import AddIcon from "../../../assets/icons/add-square.png";
+import AddIcon from "../../../assets/icons/add-square.svg";
 import EditIcon from "../../../assets/icons/edit.svg";
 import LeftArrow from "../../../assets/icons/left_arrow.svg";
 import RightArrow from "../../../assets/icons/right_arrow.svg";
