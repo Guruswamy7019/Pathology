@@ -300,14 +300,11 @@
 /* Wrapper that looks like a floating-label field */
 .radioFieldBorder {
   position: relative;
-  border: 1px solid #E2E3E5;
-  border-radius: 8px;
   background: #fff;
   height: 2.6em;
   display: flex;
   align-items: center;
-  padding: 0 0.875em;
-  gap: 1.5em;
+  gap: 0.5em;
 }
 
 .radioFloatLabel {
@@ -356,7 +353,7 @@
 .radioLabel input[type="radio"]:checked {
   border-color: black;
   background: #E17C64;
-  box-shadow: inset 0 0 0 1px #fff; /* white inner ring = dot effect */
+  box-shadow: inset 0 0 0 1px #fff;
 }
 
 /* ─── Checkbox ────────────────────────────────────────────────────────────── */
@@ -421,7 +418,7 @@
   cursor: pointer;
   font-size: 0.875em;
   font-weight: 600;
-  color: #E17C64;
+  color: #5A8AEA;
   font-family: 'Montserrat', sans-serif;
   padding: 0.5em 0;
   transition: opacity 0.2s;
@@ -551,7 +548,7 @@
 .formulaBox {
   border: 1px solid #E2E3E5;
   background-color: #F8F8F9;
-  border-radius: 12px;
+  border-radius: 16px;
   padding: 1.5em 1.25em 1em;
   display: flex;
   align-items: stretch;
@@ -565,7 +562,7 @@
   justify-content: center;
   align-items: center;
   background: #ffffff;
-  border-radius: 16px;
+  border-radius: 12px;
   padding: 1em 1.25em;
   box-shadow: 0 0 0 1px #e5e5e5 inset; /* subtle border */
 }
