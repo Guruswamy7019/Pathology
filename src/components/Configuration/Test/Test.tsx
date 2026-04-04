@@ -37,7 +37,7 @@ const toolbarConfig: Record<string, ToolbarConfig> = {
     title: (count) => `List of Tests (${count})`,
     searchPlaceholder: "Search by Test Code / Name",
     createLabel: "Create New Test",
-    createPath: "/pathology/configuration/test/new-test/create",
+    createPath: "/pathology/configuration/Test/test/create",
   },
   Template: {
     title: (count) => `List of Templates (${count})`,

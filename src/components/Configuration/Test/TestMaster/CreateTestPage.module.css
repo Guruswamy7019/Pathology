@@ -1,0 +1,583 @@
+/* ─── Page Layout ─────────────────────────────────────────────────────────── */
+.page {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  background: #f3f3f3;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  font-family: 'Nunito', sans-serif;
+  font-size: clamp(12px, 1.2vh, 16px);
+}
+
+.card {
+  background: #fff;
+  border-radius: 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* ─── Header ──────────────────────────────────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+  padding: 1.5em 1.5em 1em;
+  flex-shrink: 0;
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.25em;
+  border-radius: 8px;
+  color: #505050;
+  transition: background 0.2s;
+}
+.backBtn:hover { background: #f3f3f3; }
+
+.pageTitle {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.125em;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+/* ─── Content ─────────────────────────────────────────────────────────────── */
+.content {
+  flex: 1;
+  padding: 0 1.5em;
+  display: flex;
+  flex-direction: column;
+  gap: 0;           /* sections manage their own spacing via padding */
+  overflow-y: auto;
+  min-height: 0;
+}
+
+/* ─── Section ─────────────────────────────────────────────────────────────── */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  padding-bottom: 1.5em;
+}
+
+.sectionTitle {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75em;
+  font-weight: 700;
+  color: #7a7a7a;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0;
+}
+
+/* ─── HR divider between sections ────────────────────────────────────────── */
+.sectionDivider {
+  border: none;
+  border-top: 1px solid #E2E3E5;
+  margin: 0 0 0.25em;
+}
+
+/* ─── Form Grids ──────────────────────────────────────────────────────────── */
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25em 1.5em;
+}
+
+.formGrid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25em 1.5em;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* ─── Floating-label field ────────────────────────────────────────────────── */
+.fieldBorder {
+  position: relative;
+  border: 1px solid #E2E3E5;
+  border-radius: 8px;
+  background: #fff;
+  transition: border-color 0.2s;
+}
+.fieldBorder:focus-within { border-color: #9e9e9e; }
+
+.floatLabel {
+  position: absolute;
+  top: -0.55em;
+  left: 0.75em;
+  padding: 0 0.3em;
+  background: #fff;
+  font-size: 0.72em;
+  font-weight: 500;
+  color: #9e9e9e;
+  font-family: 'Noto Sans', sans-serif;
+  line-height: 1;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 1;
+}
+
+.floatInput {
+  height: 2.6em;
+  padding: 0 0.875em;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9em;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 500;
+  color: #1a1a1a;
+  outline: none;
+  box-sizing: border-box;
+  width: 100%;
+  background: transparent;
+  -moz-appearance: textfield;
+}
+.floatInput::-webkit-outer-spin-button,
+.floatInput::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+/* For clock-icon row */
+.floatInputFlex {
+  flex: 1;
+  height: 2.6em;
+  padding: 0 0.875em;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9em;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 500;
+  color: #1a1a1a;
+  outline: none;
+  background: transparent;
+  min-width: 0;
+}
+
+.floatSelect {
+  height: 2.6em;
+  padding: 0 2em 0 0.875em;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9em;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 500;
+  color: #1a1a1a;
+  outline: none;
+  appearance: none;
+  background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239e9e9e' d='M6 8L1 3h10z'/%3E%3C/svg%3E") no-repeat right 0.875em center;
+  box-sizing: border-box;
+  width: 100%;
+  cursor: pointer;
+}
+
+.floatTextarea {
+  width: 100%;
+  min-height: 5em;
+  padding: 0.75em 0.875em;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9em;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 500;
+  color: #1a1a1a;
+  outline: none;
+  box-sizing: border-box;
+  background: transparent;
+  resize: none;
+}
+
+/* Clock icon row */
+.iconInputRow {
+  display: flex;
+  align-items: center;
+  height: 2.6em;
+}
+
+.inputIconRight {
+  display: flex;
+  align-items: center;
+  padding-right: 0.75em;
+  flex-shrink: 0;
+}
+
+/* ─── Checkbox ────────────────────────────────────────────────────────────── */
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  font-size: 0.875em;
+  font-weight: 500;
+  color: #1a1a1a;
+  cursor: pointer;
+  user-select: none;
+  height: 2.6em;
+}
+
+.checkboxLabel input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 1em;
+  height: 1em;
+  border-radius: 3px;
+  border: 2px solid #ccc;
+  background: #fff;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color 0.15s, background 0.15s;
+  position: relative;
+}
+.checkboxLabel input[type="checkbox"]:checked {
+  border-color: #bbfebd;
+  background: #bbfebd;
+}
+.checkboxLabel input[type="checkbox"]:checked::after {
+  content: '';
+  position: absolute;
+  left: 3px;
+  top: -1px;
+  width: 3px;
+  height: 7px;
+  border: 2px solid green;
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg);
+}
+
+/* ─── Radio buttons — below section title, left-aligned ──────────────────── */
+.radioGroup {
+  display: flex;
+  align-items: center;
+  gap: 1.5em;
+}
+
+.radioLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  font-size: 0.9em;
+  font-weight: 500;
+  color: #1a1a1a;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Outer ring — unchecked */
+.radioOff {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  background: #fff;
+  flex-shrink: 0;
+}
+
+/* Outer ring — checked (orange) */
+.radioOn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.2em;
+  height: 1.2em;
+  border-radius: 50%;
+  border: 2px solid black;
+  background: #fff;
+  flex-shrink: 0;
+}
+
+/* Inner dot when checked */
+.radioDot {
+  display: block;
+  width: 0.7em;
+  height: 0.7em;
+  border-radius: 50%;
+  background: #E17C64;
+}
+
+/* ─── Dropdown trigger ────────────────────────────────────────────────────── */
+.searchDropdownWrapper {
+  position: relative;
+  width: 100%;
+  max-width: 340px;
+}
+
+.sampleDropdownWrapper {
+  position: relative;
+  width: 240px;
+}
+
+.dropdownTrigger {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  height: 2.6em;
+  padding: 0 0.875em;
+  border: 1px solid #E2E3E5;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  user-select: none;
+}
+.dropdownTrigger:hover { border-color: #bbb; }
+
+.dropdownPlaceholder {
+  flex: 1;
+  font-size: 0.875em;
+  color: #9e9e9e;
+  font-family: 'Nunito', sans-serif;
+}
+
+/* ─── Dropdown panel — scroll-locked ─────────────────────────────────────── */
+.dropdownPanel {
+  position: absolute;
+  top: calc(100% + 6px);
+  min-width: 350px;
+  background: #fff;
+  border: 1px solid #E2E3E5;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  z-index: 200;
+  /* Scroll is contained inside this panel only */
+  max-height: 240px;
+  overflow-y: auto;
+  overscroll-behavior: contain;   /* key: prevents propagating scroll to page */
+}
+
+/* Each row */
+.dropdownRow {
+  display: flex;
+  align-items: center;
+  gap: 1em;
+  padding: 0.7em 1.1em;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.dropdownRow:hover { background: #fafafa; }
+
+.dropdownDivider {
+  height: 1px;
+  background: #f0f0f0;
+  margin: 0 0.75em;
+}
+
+/* Large round circle — OFF */
+.roundCheckOff {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1em;
+  height: 1em;
+  border-radius: 8px;
+  border: 2px solid #E2E3E5;
+  background: #fff;
+  flex-shrink: 0;
+}
+
+/* Large round circle — ON */
+.roundCheckOn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1em;
+  height: 1em;
+  border-radius: 8px;
+  border: 2px solid #c8e6c9;
+  background: #e8f5e9;
+  flex-shrink: 0;
+}
+
+.dropdownRowLabel {
+  font-size: 0.9em;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.dropdownPipe {
+  color: #9e9e9e;
+  font-weight: 400;
+  margin: 0 0.15em;
+}
+
+/* ─── Chips ───────────────────────────────────────────────────────────────── */
+.chipsArea {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  background: #FFF4F2;
+  border: 1px solid #E2E3E5;
+  border-radius: 8px;
+  padding: 0.4em 0.5em 0.4em 0.75em;
+}
+
+.chipInner {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1em;
+}
+
+.chipCode {
+  font-size: 0.78em;
+  font-weight: 700;
+  color: #1a1a1a;
+  font-family: 'Montserrat', sans-serif;
+  line-height: 1.2;
+}
+
+.chipName {
+  font-size: 0.72em;
+  color: #7a7a7a;
+  font-family: 'Nunito', sans-serif;
+  line-height: 1.2;
+  max-width: 140px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chipRemove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1em;
+  height: 2em;
+  border-radius: 50%;
+  border: 1.5px solid #CB3F3F;
+  background: #FFF4F2;
+  color: #CB3F3F;
+  cursor: pointer;
+  font-size: 0.5em;
+  flex-shrink: 0;
+  transition: background 0.15s;
+  line-height: 1;
+}
+.chipRemove:hover { background: #ffd6d6; }
+
+/* ─── Sample Details ──────────────────────────────────────────────────────── */
+.sampleHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* 2-col grid */
+.sampleGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75em;
+}
+
+.sampleGridRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1em;
+}
+
+/* Each cell: [✕ circle] [grey pill] */
+.sampleCell {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+}
+
+/* Red ✕ circle */
+.sampleDeleteCircle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5em;
+  height: 1.5em;
+  border-radius: 50%;
+  border: 1.5px solid #CB3F3F;
+  background: #fff0f0;
+  color: #CB3F3F;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.sampleDeleteCircle:hover { background: #ffd6d6; }
+
+/* Grey outer pill — contains Sample + Frequency side by side */
+.samplePill {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.75em;
+  background: #F8F8F9;
+  border-radius: 16px;
+  padding: 1.5em 0.75em 1em 0.75em;
+  min-width: 0;
+}
+
+/* Each field inside pill — equal flex, white fieldBorder on grey bg */
+.samplePillField {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Override fieldBorder bg so it pops against grey pill */
+.samplePill .fieldBorder {
+  background: #fff;
+}
+
+/* ─── Footer ──────────────────────────────────────────────────────────────── */
+.footerActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75em;
+  padding: 1em 1.5em;
+  flex-shrink: 0;
+}
+
+.cancelBtn {
+  height: 2.75em;
+  padding: 0 1.5em;
+  border: 1px solid #E2E3E5;
+  border-radius: 10px;
+  background: #fff;
+  font-size: 0.9em;
+  font-weight: 600;
+  color: #505050;
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  transition: background 0.2s;
+}
+.cancelBtn:hover { background: #f3f3f3; }
+
+.saveBtn {
+  height: 2.75em;
+  padding: 0 2em;
+  border: none;
+  border-radius: 10px;
+  background: #505050;
+  color: #fff;
+  font-size: 0.9em;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  transition: background 0.2s;
+}
+.saveBtn:hover { background: #222; }
