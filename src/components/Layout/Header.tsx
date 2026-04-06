@@ -123,17 +123,21 @@ const Header = () => {
 
         <Typography sx={{ color: "#666" }}>Pathology</Typography>
 
-        {activeBreadcrumb.parent && (
+{/* ALWAYS show arrow after Pathology */}
+<Box component="img" src={ArrowIcon} sx={{ width: 12, height: 12 }} />
+
+{/* Show parent if exists */}
+{activeBreadcrumb.parent && (
   <>
-    <Box component="img" src={ArrowIcon} sx={{ width: 12, height: 12 }} />
     <Typography sx={{ color: "#666" }}>
       {activeBreadcrumb.parent}
     </Typography>
+
+    <Box component="img" src={ArrowIcon} sx={{ width: 12, height: 12 }} />
   </>
 )}
 
-<Box component="img" src={ArrowIcon} sx={{ width: 12, height: 12 }} />
-
+{/* Always show child */}
 <Typography sx={{ color: "#1f1f1f", fontSize: 18, fontWeight: 700 }}>
   {activeBreadcrumb.child}
 </Typography>
