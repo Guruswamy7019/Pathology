@@ -29,21 +29,30 @@ type HeaderUser = {
   designation_label: string;
 };
 
-const getActiveMenuLabel = (pathname: string) => {
-  for (const item of PATHOLOGY_MENU) {
+type ActiveMenu = {
+  parent: string | null;
+  child: string;
+};
+
+const getActiveMenuLabel = (pathname: string): ActiveMenu => {
+    for (const item of PATHOLOGY_MENU) {
     if (item.path === pathname) {
-      return item.label;
+      return { parent: null, child: item.label };
     }
 
     const activeSubMenu = item.subMenu?.find(
       (subItem) => subItem.path === pathname,
     );
+
     if (activeSubMenu) {
-      return activeSubMenu.label;
+      return {
+        parent: item.label,
+        child: activeSubMenu.label,
+      };
     }
   }
 
-  return "Orders";
+  return { parent: null, child: "Orders" };
 };
 
 const Header = () => {
@@ -58,7 +67,7 @@ const Header = () => {
     { clinic_id: 1, clinic__name: "Crysta IVF, Banglore", is_default: true },
   ];
   const selectedClinic = clinics.find((c) => c.is_default) || clinics[0];
-  const activeMenuLabel = getActiveMenuLabel(location.pathname);
+  const activeBreadcrumb = getActiveMenuLabel(location.pathname);
   const [clinicAnchor, setClinicAnchor] = useState<null | HTMLElement>(null);
 
   const handleClinicOpen = (e: React.MouseEvent<HTMLElement>) =>
@@ -110,17 +119,26 @@ const Header = () => {
       <Toolbar sx={{ justifyContent: "space-between", py: 2 }}>
         {/* LEFT: Breadcrumbs */}
         <Box sx={{ display: "flex", alignItems: "center", gap: "12px" }}>
-          <Typography sx={{ color: "#666" }}>Lab</Typography>
 
-          <Box component="img" src={ArrowIcon} sx={{ width: 12, height: 12 }} />
 
-          <Typography sx={{ color: "#666" }}>Pathology</Typography>
+        <Typography sx={{ color: "#666" }}>Pathology</Typography>
 
-          <Box component="img" src={ArrowIcon} sx={{ width: 12, height: 12 }} />
+        {activeBreadcrumb.parent && (
+  <>
+    <Box component="img" src={ArrowIcon} sx={{ width: 12, height: 12 }} />
+    <Typography sx={{ color: "#666" }}>
+      {activeBreadcrumb.parent}
+    </Typography>
+  </>
+)}
 
-          <Typography sx={{ color: "#1f1f1f", fontSize: 18, fontWeight: 700 }}>
-            {activeMenuLabel}
-          </Typography>
+<Box component="img" src={ArrowIcon} sx={{ width: 12, height: 12 }} />
+
+<Typography sx={{ color: "#1f1f1f", fontSize: 18, fontWeight: 700 }}>
+  {activeBreadcrumb.child}
+</Typography>
+
+
         </Box>
 
         {/* RIGHT */}
