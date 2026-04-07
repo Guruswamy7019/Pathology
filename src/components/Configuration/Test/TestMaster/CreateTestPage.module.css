@@ -462,19 +462,17 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 1em;
-  height: 2em;
-  border-radius: 50%;
-  border: 1.5px solid #CB3F3F;
-  background: #FFF4F2;
-  color: #CB3F3F;
   cursor: pointer;
-  font-size: 0.5em;
   flex-shrink: 0;
-  transition: background 0.15s;
-  line-height: 1;
+  background: transparent;
+  border: none;
+  padding: 0;
+  transition: opacity 0.15s;
 }
-.chipRemove:hover { background: #ffd6d6; }
+
+.chipRemove:hover {
+  opacity: 0.7;
+}
 
 /* ─── Sample Details ──────────────────────────────────────────────────────── */
 .sampleHeader {
@@ -508,17 +506,17 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 1.5em;
-  height: 1.5em;
-  border-radius: 50%;
-  border: 1.5px solid #CB3F3F;
-  background: #fff0f0;
-  color: #CB3F3F;
   cursor: pointer;
   flex-shrink: 0;
-  transition: background 0.15s;
+  background: transparent;
+  border: none;
+  padding: 0;
+  transition: opacity 0.15s;
 }
-.sampleDeleteCircle:hover { background: #ffd6d6; }
+
+.sampleDeleteCircle:hover {
+  opacity: 0.7;
+}
 
 /* Grey outer pill — contains Sample + Frequency side by side */
 .samplePill {

@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import DataTable, {
   Column,
   Toggle,
 } from "../CommonComponents/DataTable/DataTable";
 import EditIcon from "../../../../assets/icons/edit.svg";
+import FilterModal, { FilterValues } from "./FilterModal";
 
 type TemplateRow = {
   code: string;
@@ -15,126 +16,213 @@ type TemplateRow = {
 
 type TemplateTableProps = {
   onCountChange?: (count: number) => void;
+  filterOpen?: boolean;
+  onFilterClose?: () => void;
+  searchText?: string;
+  onEdit: (row: TemplateRow) => void;
 };
 
 const initialData: TemplateRow[] = [
   {
-    code: "TM-001",
-    name: "Template A",
+    code: "TN-041421",
+    name: "Culture & Sensitivity growth",
     noOfPathologists: 5,
+    gender: "Female",
+    status: false,
+  },
+  {
+    code: "TN-041423",
+    name: "Culture & Sensitivity no growth",
+    noOfPathologists: 4,
     gender: "Male",
     status: true,
   },
   {
-    code: "TM-002",
-    name: "Template B",
-    noOfPathologists: 3,
-    gender: "Female",
-    status: false,
-  },
-  {
-    code: "TM-003",
-    name: "Template C",
-    noOfPathologists: 2,
-    gender: "Male",
+    code: "TN-041427",
+    name: "Microbial Analysis Report Template",
+    noOfPathologists: 4,
+    gender: "Both",
     status: true,
   },
   {
-    code: "TM-004",
-    name: "Template D",
-    noOfPathologists: 3,
-    gender: "Female",
-    status: false,
-  },
-  {
-    code: "TM-009",
-    name: "Template D",
-    noOfPathologists: 3,
-    gender: "Female",
-    status: false,
-  },
-  {
-    code: "TM-005",
-    name: "Template E",
+    code: "TN-041438",
+    name: "Pathogen Sensitivity Report Template",
     noOfPathologists: 4,
     gender: "Female",
     status: true,
   },
   {
-    code: "TM-006",
-    name: "Template C",
-    noOfPathologists: 2,
+    code: "TN-041445",
+    name: "Infection Culture Report Template",
+    noOfPathologists: 4,
+    gender: "Female",
+    status: true,
+  },
+  {
+    code: "TN-041452",
+    name: "Bacterial Growth Assessment Template",
+    noOfPathologists: 4,
+    gender: "Female",
+    status: true,
+  },
+  {
+    code: "TN-041460",
+    name: "Culture Sensitivity Evaluation Template",
+    noOfPathologists: 4,
+    gender: "Female",
+    status: true,
+  },
+  {
+    code: "TN-041472",
+    name: "Pathology Culture Report Template",
+    noOfPathologists: 4,
+    gender: "Female",
+    status: true,
+  },
+  {
+    code: "TN-041481",
+    name: "Microbial Sensitivity Analysis Template",
+    noOfPathologists: 4,
+    gender: "Female",
+    status: false,
+  },
+  {
+    code: "TN-041493",
+    name: "Infectious Agent Culture Report Template",
+    noOfPathologists: 4,
+    gender: "Female",
+    status: false,
+  },
+  {
+    code: "TN-041505",
+    name: "Bacterial Sensitivity Testing Template",
+    noOfPathologists: 4,
+    gender: "Female",
+    status: false,
+  },
+  {
+    code: "TN-041517",
+    name: "General Pathology Summary Template",
+    noOfPathologists: 3,
     gender: "Male",
     status: true,
   },
   {
-    code: "TM-007",
-    name: "Template C",
+    code: "TN-041529",
+    name: "Histopathology Basic Template",
     noOfPathologists: 2,
+    gender: "Both",
+    status: true,
+  },
+  {
+    code: "TN-041541",
+    name: "Cytology Screening Template",
+    noOfPathologists: 3,
+    gender: "Female",
+    status: false,
+  },
+  {
+    code: "TN-041553",
+    name: "Advanced Microbiology Template",
+    noOfPathologists: 5,
     gender: "Male",
     status: true,
   },
   {
-    code: "TM-008",
-    name: "Template C",
+    code: "TN-041565",
+    name: "Hormonal Panel Template",
     noOfPathologists: 2,
+    gender: "Female",
+    status: true,
+  },
+  {
+    code: "TN-041577",
+    name: "Routine Blood Work Template",
+    noOfPathologists: 3,
+    gender: "Both",
+    status: false,
+  },
+  {
+    code: "TN-041589",
+    name: "Urine Microscopy Template",
+    noOfPathologists: 2,
+    gender: "Female",
+    status: true,
+  },
+  {
+    code: "TN-041601",
+    name: "Fertility Panel Report Template",
+    noOfPathologists: 4,
     gender: "Male",
     status: true,
   },
   {
-    code: "TM-010",
-    name: "Template C",
-    noOfPathologists: 2,
-    gender: "Male",
-    status: true,
-  },
-  {
-    code: "TM-011",
-    name: "Template C",
-    noOfPathologists: 2,
-    gender: "Male",
-    status: true,
-  },
-  {
-    code: "TM-012",
-    name: "Template C",
-    noOfPathologists: 2,
-    gender: "Male",
-    status: true,
-  },
-  {
-    code: "TM-013",
-    name: "Template C",
-    noOfPathologists: 2,
-    gender: "Male",
-    status: true,
+    code: "TN-041613",
+    name: "Detailed Infection Study Template",
+    noOfPathologists: 5,
+    gender: "Both",
+    status: false,
   },
 ];
 
-export default function TemplateTable({ onCountChange }: TemplateTableProps) {
-  const [data, setData] = useState<TemplateRow[]>(initialData);
+export default function TemplateTable({
+  onCountChange,
+  filterOpen = false,
+  onFilterClose,
+  searchText = "",
+  onEdit,
+}: TemplateTableProps) {
+  const [allData, setAllData] = useState<TemplateRow[]>(initialData);
+  const [activeFilters, setActiveFilters] = useState<FilterValues>({
+    gender: "",
+  });
+
+  const filteredData = useMemo(() => {
+    const query = searchText.trim().toLowerCase();
+
+    return allData.filter((row) => {
+      const matchesSearch =
+        !query ||
+        row.code.toLowerCase().includes(query) ||
+        row.name.toLowerCase().includes(query);
+
+      const matchesGender =
+        !activeFilters.gender || row.gender === activeFilters.gender;
+
+      return matchesSearch && matchesGender;
+    });
+  }, [allData, activeFilters, searchText]);
 
   useEffect(() => {
-    onCountChange?.(data.length);
-  }, [data, onCountChange]);
+    onCountChange?.(filteredData.length);
+  }, [filteredData, onCountChange]);
 
   const handleToggle = (code: string) => {
-    setData((prev) =>
+    setAllData((prev) =>
       prev.map((item) =>
         item.code === code ? { ...item, status: !item.status } : item,
       ),
     );
   };
 
+  const handleApplyFilters = (filters: FilterValues) => {
+    setActiveFilters(filters);
+  };
+
+  const handleClearFilters = () => {
+    setActiveFilters({ gender: "" });
+  };
+
   const columns: Column<TemplateRow>[] = [
-    { key: "code", header: "Template Code", width: "13%" },
-    { key: "name", header: "Template Name", width: "25%" },
-    { key: "noOfPathologists", header: "No. of Pathologists", width: "18%" },
-    { key: "gender", header: "Gender", width: "15%" },
+    { key: "code", header: "Template Code", width: "14%" },
+    { key: "name", header: "Template Name", width: "30%" },
+    { key: "noOfPathologists", header: "No. of Pathologist", width: "16%" },
+    { key: "gender", header: "Gender", width: "12%" },
     {
       key: "status",
       header: "Status",
       align: "right",
+      width: "14%",
       render: (row) => (
         <Toggle checked={row.status} onChange={() => handleToggle(row.code)} />
       ),
@@ -143,22 +231,34 @@ export default function TemplateTable({ onCountChange }: TemplateTableProps) {
       key: "actions",
       header: "",
       align: "right",
-      width: "5%",
+      width: "6%",
       render: (row) => (
         <button
           type="button"
-          onClick={() => console.log("edit", row)}
+          onClick={() => onEdit(row)}
           style={{
             background: "transparent",
             border: "none",
             cursor: "pointer",
           }}
         >
-          <img src={EditIcon} alt="" width={20} height={20} />
+          <img src={EditIcon} alt="edit" width={18} height={18} />
         </button>
       ),
     },
   ];
 
-  return <DataTable columns={columns} data={data} />;
+  return (
+    <>
+      <DataTable columns={columns} data={filteredData} />
+
+      <FilterModal
+        isOpen={filterOpen}
+        onClose={() => onFilterClose?.()}
+        onApply={handleApplyFilters}
+        onClearAll={handleClearFilters}
+        initialValues={activeFilters}
+      />
+    </>
+  );
 }

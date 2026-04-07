@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import styles from "./CreateParameterPage.module.css";
 import EditIcon from "../../../../assets/icons/edit.svg";
 import BackIcon from "../../../../assets/icons/back_icon.svg";
@@ -38,6 +38,14 @@ type FormState = {
   deltaCheckPercentage: string;
   techniqueUsed: string;
   executionCalendarLinking: string;
+};
+
+type ParameterEditData = {
+  code: string;
+  name: string;
+  printName: string;
+  unit: string;
+  status: boolean;
 };
 
 // ─── Initial Data ─────────────────────────────────────────────────────────────
@@ -157,16 +165,22 @@ function FloatSelect({
 
 export default function CreateParameterPage() {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const editData = location.state?.parameterData as
+    | ParameterEditData
+    | undefined;
+  const isEditMode = location.state?.mode === "edit";
 
   const [form, setForm] = useState<FormState>({
-    parameterCode: "AG-4512",
-    parameterName: "CBC",
-    parameterPrintName: "Complete Blood Count",
+    parameterCode: editData?.code ?? "",
+    parameterName: editData?.name ?? "",
+    parameterPrintName: editData?.printName ?? "",
     typeOfValue: "Numeric",
-    isSkipNumeric: true,
-    parameterUnit: "ML",
-    deltaCheckPercentage: "20.50",
-    techniqueUsed: "Lorem Ipsum",
+    isSkipNumeric: false,
+    parameterUnit: editData?.unit ?? "ML",
+    deltaCheckPercentage: "",
+    techniqueUsed: "",
     executionCalendarLinking: "Lorem Ipsum",
   });
 
@@ -174,7 +188,6 @@ export default function CreateParameterPage() {
   const [editingRange, setEditingRange] = useState<ReferenceRange | null>(null);
   const [nextId, setNextId] = useState(3);
 
-  // Formula state
   const [formulaParam1, setFormulaParam1] = useState("Sample Value 1");
   const [formulaParam2, setFormulaParam2] = useState("Sample Value 2");
 
@@ -237,7 +250,11 @@ export default function CreateParameterPage() {
   };
 
   const handleSave = () => {
-    console.log("Save:", { form, ranges });
+    if (isEditMode) {
+      console.log("UPDATE PARAMETER:", { form, ranges });
+    } else {
+      console.log("CREATE PARAMETER:", { form, ranges });
+    }
     navigate("/pathology/configuration/test");
   };
 
@@ -248,20 +265,23 @@ export default function CreateParameterPage() {
   return (
     <div className={styles.page}>
       <div className={styles.card}>
-        {/* ── Header ──────────────────────────────────────────────────────── */}
         <div className={styles.header}>
-          <button className={styles.backBtn} onClick={handleCancel}>
+          <button
+            type="button"
+            className={styles.backBtn}
+            onClick={handleCancel}
+          >
             <img src={BackIcon} alt="back" className={styles.backIcon} />
           </button>
-          <h2 className={styles.pageTitle}>Create New Parameter</h2>
+          <h2 className={styles.pageTitle}>
+            {isEditMode ? "Edit Parameter" : "Create New Parameter"}
+          </h2>
         </div>
 
         <div className={styles.content}>
-          {/* ── Basic Details ──────────────────────────────────────────────── */}
           <div className={styles.section}>
             <p className={styles.sectionTitle}>Basic Details</p>
 
-            {/* Row 1 – 4 cols */}
             <div className={styles.formGrid}>
               <FloatInput
                 label="Parameter Code"
@@ -279,7 +299,6 @@ export default function CreateParameterPage() {
                 onChange={(v) => handleFormChange("parameterPrintName", v)}
               />
 
-              {/* Type of Value — floating-label radio box */}
               <div className={styles.formGroup}>
                 <div className={styles.radioFieldBorder}>
                   <span className={styles.radioFloatLabel}>Type Of Value</span>
@@ -308,8 +327,6 @@ export default function CreateParameterPage() {
                 </div>
               </div>
 
-              {/* Row 2 — checkbox + 3 fields */}
-              {/* Is Skip Numeric */}
               <div className={styles.formGroup}>
                 <label className={styles.checkboxLabel}>
                   <input
@@ -330,7 +347,6 @@ export default function CreateParameterPage() {
                 onChange={(v) => handleFormChange("parameterUnit", v)}
               />
 
-              {/* Delta Check — floating-label number */}
               <div className={styles.formGroup}>
                 <div className={styles.numberFieldBorder}>
                   <span className={styles.numberFloatLabel}>
@@ -346,6 +362,7 @@ export default function CreateParameterPage() {
                   />
                   <div className={styles.numberControls}>
                     <button
+                      type="button"
                       className={styles.numberBtn}
                       onClick={() =>
                         handleFormChange(
@@ -359,12 +376,17 @@ export default function CreateParameterPage() {
                       ▲
                     </button>
                     <button
+                      type="button"
                       className={styles.numberBtn}
                       onClick={() =>
                         handleFormChange(
                           "deltaCheckPercentage",
                           String(
-                            parseFloat(form.deltaCheckPercentage || "0") - 0.5,
+                            Math.max(
+                              0,
+                              parseFloat(form.deltaCheckPercentage || "0") -
+                                0.5,
+                            ),
                           ),
                         )
                       }
@@ -381,7 +403,6 @@ export default function CreateParameterPage() {
                 onChange={(v) => handleFormChange("techniqueUsed", v)}
               />
 
-              {/* Row 3 — Execution Calendar */}
               <FloatSelect
                 label="Execution Calendar Linking"
                 value={form.executionCalendarLinking}
@@ -393,11 +414,14 @@ export default function CreateParameterPage() {
             </div>
           </div>
 
-          {/* ── Reference Ranges ──────────────────────────────────────────── */}
           <div className={styles.section}>
             <div className={styles.refRangesHeader}>
               <p className={styles.sectionTitle}>Reference Ranges</p>
-              <button className={styles.addRangeBtn} onClick={handleAddRange}>
+              <button
+                type="button"
+                className={styles.addRangeBtn}
+                onClick={handleAddRange}
+              >
                 + Add New Reference Ranges
               </button>
             </div>
@@ -431,9 +455,9 @@ export default function CreateParameterPage() {
                 <tbody>
                   {ranges.map((row) => (
                     <tr key={row.id}>
-                      {/* Sticky delete */}
                       <td>
                         <button
+                          type="button"
                           className={styles.deleteBtn}
                           onClick={() => handleDeleteRange(row.id)}
                         >
@@ -485,9 +509,9 @@ export default function CreateParameterPage() {
                           ? row.notes.slice(0, 40) + "…"
                           : row.notes}
                       </td>
-                      {/* Sticky edit */}
                       <td>
                         <button
+                          type="button"
                           className={styles.editRowBtn}
                           onClick={() => handleEditRange(row)}
                         >
@@ -506,11 +530,9 @@ export default function CreateParameterPage() {
             </div>
           </div>
 
-          {/* ── Formula ───────────────────────────────────────────────────── */}
           <div className={styles.section}>
             <p className={styles.sectionTitle}>Formula</p>
             <div className={styles.formulaBox}>
-              {/* LEFT — live expression */}
               <div className={styles.formulaInner}>
                 <div className={styles.formulaExpression}>
                   <span className={styles.formulaText}>(</span>
@@ -538,48 +560,60 @@ export default function CreateParameterPage() {
                   <span className={styles.formulaText}>100</span>
                 </div>
               </div>
-              {/* Vertical divider */}
+
               <div className={styles.formulaDivider} />
-              {/* RIGHT — operator palette + action buttons */}
+
               <div className={styles.formulaControls}>
-                {/* Row 1: ( ) + - * | Validate */}
                 <div className={styles.formulaRow}>
                   {["(", ")", "+", "-", "*"].map((op) => (
-                    <button key={op} className={styles.formulaBtn}>
+                    <button
+                      key={op}
+                      type="button"
+                      className={styles.formulaBtn}
+                    >
                       {op}
                     </button>
                   ))}
-                  <button className={styles.validateBtn}>
+                  <button type="button" className={styles.validateBtn}>
                     Validate Formula
                   </button>
                 </div>
-                {/* Row 2: / 0 | Add Parameter | Clear All */}
                 <div className={styles.formulaRow}>
                   {["/", "0"].map((op) => (
-                    <button key={op} className={styles.formulaBtn}>
+                    <button
+                      key={op}
+                      type="button"
+                      className={styles.formulaBtn}
+                    >
                       {op}
                     </button>
                   ))}
-                  <button className={styles.addParamBtn}>Add Parameter</button>
-                  <button className={styles.clearBtn}>Clear All</button>
+                  <button type="button" className={styles.addParamBtn}>
+                    Add Parameter
+                  </button>
+                  <button type="button" className={styles.clearBtn}>
+                    Clear All
+                  </button>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* ── Footer ──────────────────────────────────────────────────────── */}
         <div className={styles.footerActions}>
-          <button className={styles.cancelBtn} onClick={handleCancel}>
+          <button
+            type="button"
+            className={styles.cancelBtn}
+            onClick={handleCancel}
+          >
             Cancel
           </button>
-          <button className={styles.saveBtn} onClick={handleSave}>
+          <button type="button" className={styles.saveBtn} onClick={handleSave}>
             Save
           </button>
         </div>
       </div>
 
-      {/* ── Side Panel ────────────────────────────────────────────────────── */}
       {editingRange && (
         <div className={styles.overlay} onClick={() => setEditingRange(null)}>
           <div
@@ -588,9 +622,12 @@ export default function CreateParameterPage() {
           >
             <div className={styles.sidePanelHeader}>
               <h3 className={styles.sidePanelTitle}>
-                Add New Reference Ranges & Rules
+                {ranges.some((r) => r.id === editingRange.id)
+                  ? "Edit Reference Ranges & Rules"
+                  : "Add New Reference Ranges & Rules"}
               </h3>
               <button
+                type="button"
                 className={styles.closeBtn}
                 onClick={() => setEditingRange(null)}
               >
@@ -599,7 +636,6 @@ export default function CreateParameterPage() {
             </div>
 
             <div className={styles.sidePanelContent}>
-              {/* Category & Machine */}
               <div className={styles.sidePanelGrid}>
                 <div className={styles.formGroup}>
                   <label className={styles.label}>Category</label>
@@ -637,7 +673,6 @@ export default function CreateParameterPage() {
                 </div>
               </div>
 
-              {/* Min/Max Ref */}
               <div className={styles.sidePanelGrid}>
                 <div className={styles.formGroup}>
                   <label className={styles.label}>Min. Ref.</label>
@@ -693,7 +728,6 @@ export default function CreateParameterPage() {
                 </div>
               </div>
 
-              {/* Is Age Applicable */}
               <label className={styles.checkboxLabel}>
                 <input
                   type="checkbox"
@@ -708,7 +742,6 @@ export default function CreateParameterPage() {
                 Is Age Applicable
               </label>
 
-              {/* Age Limits */}
               <div className={styles.sidePanelGrid}>
                 <div className={styles.formGroup}>
                   <label className={styles.label}>Age - Lower Limit</label>
@@ -738,7 +771,6 @@ export default function CreateParameterPage() {
                 </div>
               </div>
 
-              {/* Improbable Values */}
               <div className={styles.sidePanelGrid}>
                 <div className={styles.formGroup}>
                   <label className={styles.label}>Improbable Value 1</label>
@@ -770,7 +802,6 @@ export default function CreateParameterPage() {
 
               <div className={styles.divider} />
 
-              {/* Is Reflex */}
               <label className={styles.checkboxLabel}>
                 <input
                   type="checkbox"
@@ -785,7 +816,6 @@ export default function CreateParameterPage() {
                 Is Reflex
               </label>
 
-              {/* Reflex Values */}
               <div className={styles.sidePanelGrid}>
                 <div className={styles.formGroup}>
                   <label className={styles.label}>Reflex Value 1</label>
@@ -815,7 +845,6 @@ export default function CreateParameterPage() {
                 </div>
               </div>
 
-              {/* Panic Values */}
               <div className={styles.sidePanelGrid}>
                 <div className={styles.formGroup}>
                   <label className={styles.label}>Panic Value 1</label>
@@ -845,14 +874,10 @@ export default function CreateParameterPage() {
                 </div>
               </div>
 
-              <div className={styles.divider} />
-
-              {/* Varying Ref Ranges */}
               <div className={styles.formGroup}>
                 <label className={styles.label}>Varying Ref. Ranges</label>
                 <textarea
-                  className={styles.input}
-                  style={{ height: "5em", resize: "none", paddingTop: "0.5em" }}
+                  className={styles.textarea}
                   value={editingRange.varyingRefRanges}
                   onChange={(e) =>
                     setEditingRange({
@@ -863,15 +888,16 @@ export default function CreateParameterPage() {
                 />
               </div>
 
-              {/* Notes */}
               <div className={styles.formGroup}>
                 <label className={styles.label}>Notes</label>
                 <textarea
-                  className={styles.input}
-                  style={{ height: "5em", resize: "none", paddingTop: "0.5em" }}
+                  className={styles.textarea}
                   value={editingRange.notes}
                   onChange={(e) =>
-                    setEditingRange({ ...editingRange, notes: e.target.value })
+                    setEditingRange({
+                      ...editingRange,
+                      notes: e.target.value,
+                    })
                   }
                 />
               </div>
@@ -879,12 +905,17 @@ export default function CreateParameterPage() {
 
             <div className={styles.sidePanelFooter}>
               <button
+                type="button"
                 className={styles.cancelBtn}
                 onClick={() => setEditingRange(null)}
               >
                 Cancel
               </button>
-              <button className={styles.saveBtn} onClick={handleSaveRange}>
+              <button
+                type="button"
+                className={styles.saveBtn}
+                onClick={handleSaveRange}
+              >
                 Save
               </button>
             </div>
