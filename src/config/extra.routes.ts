@@ -51,4 +51,15 @@ export const EXTRA_ROUTES: ExtraRoute[] = [
       )
     ),
   },
+    // ── Template Master ───────────────────────────────────────────────────────
+  {
+    key: "template-create",
+    path: "/pathology/configuration/test/template/create",
+    page: lazy(() => import("../components/Configuration/Test/TemplateMaster/CreateTemplatePage")),
+  },
+  // {
+  //   key: "template-edit",
+  //   path: "/pathology/configuration/test/template/edit/:id",
+  //   page: lazy(() => import("../components/Configuration/Test/TemplateMaster/EditTemplatePage")),
+  // },
 ];

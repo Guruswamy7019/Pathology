@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import styles from "./CreateTestPage.module.css";
 import BackIcon from "../../../../assets/icons/back_icon.svg";
+import CloseCircleIcon from "../../../../assets/icons/close-circle.svg";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -30,6 +31,15 @@ type FormState = {
   isSensitive: boolean;
   suggestionNote: string;
   disclaimer: string;
+};
+
+type TestEditData = {
+  code: string;
+  name: string;
+  printName: string;
+  category: string;
+  noOfParameter: number;
+  status: boolean;
 };
 
 // ─── Mock Data ────────────────────────────────────────────────────────────────
@@ -151,8 +161,6 @@ function FloatTextarea({
   );
 }
 
-// ─── Figma dropdown — large round checkbox, dividers, scroll-locked list ──────
-
 function FigmaDropdown({
   placeholder,
   items,
@@ -170,7 +178,6 @@ function FigmaDropdown({
   const ref = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
 
-  // Close on outside click
   useEffect(() => {
     function onOutside(e: MouseEvent) {
       if (ref.current && !ref.current.contains(e.target as Node))
@@ -180,7 +187,6 @@ function FigmaDropdown({
     return () => document.removeEventListener("mousedown", onOutside);
   }, []);
 
-  // Prevent page scroll when hovering over the dropdown list
   useEffect(() => {
     const el = listRef.current;
     if (!el) return;
@@ -196,7 +202,6 @@ function FigmaDropdown({
       }
       ref={ref}
     >
-      {/* Trigger */}
       <div
         className={styles.dropdownTrigger}
         onClick={() => setOpen((o) => !o)}
@@ -225,7 +230,6 @@ function FigmaDropdown({
         </svg>
       </div>
 
-      {/* Panel */}
       {open && (
         <div
           className={styles.dropdownPanel}
@@ -284,18 +288,22 @@ function FigmaDropdown({
 
 export default function CreateTestPage() {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const editData = location.state?.testData as TestEditData | undefined;
+  const isEditMode = location.state?.mode === "edit";
 
   const [form, setForm] = useState<FormState>({
-    testCode: "AG-4512",
-    testName: "CBC",
-    printName: "Complete Blood Count",
-    category: "Biochemistry",
+    testCode: editData?.code ?? "",
+    testName: editData?.name ?? "",
+    printName: editData?.printName ?? "",
+    category: editData?.category ?? "Biochemistry",
     serviceName: "Natural Killer Self Panel",
     tubeName: "Purple Top - K2 - EDTA",
-    testCompletionTime: "45:30",
-    isSensitive: true,
-    suggestionNote: "Lorem Ipsum Dolor Set",
-    disclaimer: "Lorem Ipsum Dolor Set",
+    testCompletionTime: "",
+    isSensitive: false,
+    suggestionNote: "",
+    disclaimer: "",
   });
 
   const [reportMode, setReportMode] = useState<ReportMode>("ByParameter");
@@ -362,29 +370,52 @@ export default function CreateTestPage() {
     sampleRows.some((r) => r.sampleType === s.name),
   ).map((s) => s.id);
 
-  // Group into pairs for 2-col grid
   const samplePairs: SampleRow[][] = [];
   for (let i = 0; i < sampleRows.length; i += 2) {
     samplePairs.push(sampleRows.slice(i, i + 2));
   }
 
+  const handleSave = () => {
+    if (isEditMode) {
+      console.log("UPDATE TEST:", {
+        form,
+        reportMode,
+        selectedParamIds,
+        selectedTemplateIds,
+        sampleRows,
+      });
+    } else {
+      console.log("CREATE TEST:", {
+        form,
+        reportMode,
+        selectedParamIds,
+        selectedTemplateIds,
+        sampleRows,
+      });
+    }
+    navigate("/pathology/configuration/test");
+  };
+
   return (
     <div className={styles.page}>
       <div className={styles.card}>
-        {/* ── Header ──────────────────────────────────────────────────── */}
         <div className={styles.header}>
-          <button className={styles.backBtn} onClick={() => navigate(-1)}>
+          <button
+            type="button"
+            className={styles.backBtn}
+            onClick={() => navigate(-1)}
+          >
             <img src={BackIcon} alt="back" className={styles.backIcon} />
           </button>
-          <h2 className={styles.pageTitle}>Create New Test</h2>
+          <h2 className={styles.pageTitle}>
+            {isEditMode ? "Edit Test" : "Create New Test"}
+          </h2>
         </div>
 
         <div className={styles.content}>
-          {/* ── BASIC DETAILS ─────────────────────────────────────────── */}
           <div className={styles.section}>
             <p className={styles.sectionTitle}>Basic Details</p>
 
-            {/* Row 1: Test Code | Test Name | Print Name | Category */}
             <div className={styles.formGrid}>
               <FloatInput
                 label="Test Code"
@@ -409,7 +440,6 @@ export default function CreateTestPage() {
               />
             </div>
 
-            {/* Row 2: Service Name | Tube Name | Test Completion Time | Is Sensitive */}
             <div className={styles.formGrid}>
               <FloatSelect
                 label="Service Name"
@@ -424,7 +454,6 @@ export default function CreateTestPage() {
                 onChange={(v) => set("tubeName", v)}
               />
 
-              {/* Test Completion Time with clock icon */}
               <div className={styles.formGroup}>
                 <div className={styles.fieldBorder}>
                   <span className={styles.floatLabel}>
@@ -457,7 +486,6 @@ export default function CreateTestPage() {
                 </div>
               </div>
 
-              {/* Is Sensitive */}
               <div
                 className={styles.formGroup}
                 style={{ justifyContent: "center" }}
@@ -473,7 +501,6 @@ export default function CreateTestPage() {
               </div>
             </div>
 
-            {/* Row 3: Suggestion Note | Disclaimer */}
             <div className={styles.formGrid2}>
               <FloatTextarea
                 label="Suggestion Note"
@@ -488,14 +515,10 @@ export default function CreateTestPage() {
             </div>
           </div>
 
-          {/* ── REPORTS DETAILS ───────────────────────────────────────── */}
           <div className={styles.section}>
-            {/* HR divider before section */}
             <hr className={styles.sectionDivider} />
-
             <p className={styles.sectionTitle}>Reports Details</p>
 
-            {/* Radio buttons — below title, left side */}
             <div className={styles.radioGroup}>
               <label className={styles.radioLabel}>
                 <span
@@ -543,7 +566,6 @@ export default function CreateTestPage() {
               </label>
             </div>
 
-            {/* Search dropdown */}
             <FigmaDropdown
               placeholder={
                 reportMode === "ByParameter"
@@ -563,7 +585,6 @@ export default function CreateTestPage() {
               }
             />
 
-            {/* Chips */}
             {reportMode === "ByParameter" && selectedParams.length > 0 && (
               <div className={styles.chipsArea}>
                 {selectedParams.map((p) => (
@@ -573,10 +594,16 @@ export default function CreateTestPage() {
                       <span className={styles.chipName}>{p.name}</span>
                     </span>
                     <button
+                      type="button"
                       className={styles.chipRemove}
                       onClick={() => toggleParam(p.id)}
                     >
-                      ✕
+                      <img
+                        src={CloseCircleIcon}
+                        alt="remove"
+                        width={16}
+                        height={16}
+                      />
                     </button>
                   </span>
                 ))}
@@ -592,6 +619,7 @@ export default function CreateTestPage() {
                       <span className={styles.chipName}>{t.name}</span>
                     </span>
                     <button
+                      type="button"
                       className={styles.chipRemove}
                       onClick={() => toggleTemplate(t.id)}
                     >
@@ -603,9 +631,7 @@ export default function CreateTestPage() {
             )}
           </div>
 
-          {/* ── SAMPLE DETAILS ────────────────────────────────────────── */}
           <div className={styles.section}>
-            {/* HR divider before section */}
             <hr className={styles.sectionDivider} />
 
             <div className={styles.sampleHeader}>
@@ -619,47 +645,25 @@ export default function CreateTestPage() {
               />
             </div>
 
-            {/* 2-col grid — each cell is: [✕] [grey pill: Sample | Frequency] */}
             <div className={styles.sampleGrid}>
               {samplePairs.map((pair, pairIdx) => (
                 <div key={pairIdx} className={styles.sampleGridRow}>
                   {pair.map((row) => (
                     <div key={row.id} className={styles.sampleCell}>
-                      {/* Red ✕ circle outside pill */}
                       <button
+                        type="button"
                         className={styles.sampleDeleteCircle}
                         onClick={() => deleteSample(row.id)}
                       >
-                        <svg
-                          width="9"
-                          height="9"
-                          viewBox="0 0 10 10"
-                          fill="none"
-                        >
-                          <line
-                            x1="1"
-                            y1="1"
-                            x2="9"
-                            y2="9"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                          />
-                          <line
-                            x1="9"
-                            y1="1"
-                            x2="1"
-                            y2="9"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                          />
-                        </svg>
+                        <img
+                          src={CloseCircleIcon}
+                          alt="remove"
+                          width={16}
+                          height={16}
+                        />
                       </button>
 
-                      {/* Grey outer pill */}
                       <div className={styles.samplePill}>
-                        {/* Sample select — equal flex */}
                         <div className={styles.samplePillField}>
                           <div className={styles.fieldBorder}>
                             <span className={styles.floatLabel}>Sample</span>
@@ -681,7 +685,6 @@ export default function CreateTestPage() {
                           </div>
                         </div>
 
-                        {/* Frequency input — equal flex */}
                         <div className={styles.samplePillField}>
                           <div className={styles.fieldBorder}>
                             <span className={styles.floatLabel}>Frequency</span>
@@ -701,20 +704,23 @@ export default function CreateTestPage() {
                       </div>
                     </div>
                   ))}
-                  {/* Empty spacer if odd number */}
-                  {pair.length === 1 && <div />}
                 </div>
               ))}
             </div>
           </div>
         </div>
 
-        {/* ── Footer ────────────────────────────────────────────────────── */}
         <div className={styles.footerActions}>
-          <button className={styles.cancelBtn} onClick={() => navigate(-1)}>
+          <button
+            type="button"
+            className={styles.cancelBtn}
+            onClick={() => navigate(-1)}
+          >
             Cancel
           </button>
-          <button className={styles.saveBtn}>Save</button>
+          <button type="button" className={styles.saveBtn} onClick={handleSave}>
+            Save
+          </button>
         </div>
       </div>
     </div>

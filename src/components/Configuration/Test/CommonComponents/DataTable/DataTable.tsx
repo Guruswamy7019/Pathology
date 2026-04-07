@@ -61,6 +61,7 @@ export function TabsHeader({ tabs, activeTab, setActiveTab }: TabsHeaderProps) {
 type PageToolbarProps = {
   title: string;
   searchPlaceholder?: string;
+  searchValue?: string;
   createLabel?: string;
   onSearch?: (value: string) => void;
   onAdd?: () => void;
@@ -71,6 +72,7 @@ type PageToolbarProps = {
 export function PageToolbar({
   title,
   searchPlaceholder = "Search...",
+  searchValue = "",
   createLabel = "Create New",
   onSearch,
   onAdd,
@@ -88,17 +90,24 @@ export function PageToolbar({
             alt="search"
           />
           <input
+            value={searchValue}
             placeholder={searchPlaceholder}
             className={tableStyles.searchInput}
             onChange={(e) => onSearch?.(e.target.value)}
           />
         </div>
+
         {showFilter && (
-          <button className={tableStyles.filterBtn} onClick={onFilter}>
+          <button
+            type="button"
+            className={tableStyles.filterBtn}
+            onClick={onFilter}
+          >
             <img src={FunnelIcon} alt="filter" width={30} height={30} />
           </button>
         )}
-        <button className={tableStyles.createBtn} onClick={onAdd}>
+
+        <button type="button" className={tableStyles.createBtn} onClick={onAdd}>
           <img src={AddIcon} alt="add" className={tableStyles.btnIcon} />
           {createLabel}
         </button>
@@ -144,6 +153,7 @@ export default function DataTable<T extends { [key: string]: unknown }>({
       const rowsAvailable = Math.floor(
         (availableHeight - headerH - footerH - BUFFER) / rowH,
       );
+
       setDynamicItemsPerPage(Math.max(1, rowsAvailable));
       setCurrentPage(1);
     };
@@ -153,9 +163,13 @@ export default function DataTable<T extends { [key: string]: unknown }>({
     return () => observer.disconnect();
   }, [fixedItemsPerPage]);
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [data]);
+
   const itemsPerPage = fixedItemsPerPage ?? dynamicItemsPerPage;
   const totalItems = data.length;
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage));
   const startEntry =
     totalItems === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1;
   const endEntry = Math.min(currentPage * itemsPerPage, totalItems);
@@ -209,14 +223,17 @@ export default function DataTable<T extends { [key: string]: unknown }>({
         </span>
         <div className={tableStyles.pagination}>
           <button
+            type="button"
             className={tableStyles.pageBtn}
             onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
             disabled={currentPage === 1}
           >
             <img src={LeftArrow} alt="previous" />
           </button>
+
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
             <button
+              type="button"
               key={page}
               className={`${tableStyles.pageBtn} ${currentPage === page ? tableStyles.active : ""}`}
               onClick={() => setCurrentPage(page)}
@@ -224,7 +241,9 @@ export default function DataTable<T extends { [key: string]: unknown }>({
               {page}
             </button>
           ))}
+
           <button
+            type="button"
             className={tableStyles.pageBtn}
             onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
             disabled={currentPage === totalPages}
