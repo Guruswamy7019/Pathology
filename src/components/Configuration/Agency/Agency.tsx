@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "./Agency.css";
 import { FiSearch, FiPlus } from "react-icons/fi";
-import { MdEdit } from "react-icons/md";
+import AddNewAgency from "./Add_agency";
+import editicon from "../../../assets/icons/edit.svg";
+
 
 interface Agency {
   id: number;
@@ -21,10 +23,11 @@ interface Linking {
 
 const AgencyPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"agency" | "linking">("agency");
+  const [page, setPage] = useState<"list" | "add">("list");
+  
 
   const [agencyData, setAgencyData] = useState<Agency[]>([]);
   const [linkingData, setLinkingData] = useState<Linking[]>([]);
-  const [loading, setLoading] = useState(true);
 
   const [agencySearch, setAgencySearch] = useState("");
   const [linkingSearch, setLinkingSearch] = useState("");
@@ -35,39 +38,33 @@ const AgencyPage: React.FC = () => {
   const itemsPerPage = 10;
 
   useEffect(() => {
-    setLoading(true);
+    setAgencyData([
+      { id: 1, code: "AG-1001", name: "Acuity Labs", country: "India", location: "Pune", services: 4, active: true },
+      { id: 2, code: "AG-1002", name: "Pathway Diagnostics", country: "India", location: "Chennai", services: 3, active: false },
+      { id: 3, code: "AG-1003", name: "Prime Labs", country: "India", location: "Delhi", services: 5, active: true },
+      { id: 4, code: "AG-1004", name: "Care Labs", country: "India", location: "Hyderabad", services: 2, active: false },
+      { id: 5, code: "AG-1005", name: "Wellness Labs", country: "India", location: "Mumbai", services: 6, active: true },
+      { id: 6, code: "AG-1006", name: "Health Labs", country: "India", location: "Bangalore", services: 2, active: true },
+      { id: 7, code: "AG-1007", name: "Metro Labs", country: "India", location: "Delhi", services: 3, active: false },
+      { id: 8, code: "AG-1008", name: "City Labs", country: "India", location: "Pune", services: 4, active: true },
+      { id: 9, code: "AG-1009", name: "Nova Labs", country: "India", location: "Chennai", services: 2, active: true },
+      { id: 10, code: "AG-1010", name: "Global Labs", country: "India", location: "Hyderabad", services: 1, active: false },
+      { id: 11, code: "AG-1011", name: "Elite Labs", country: "India", location: "Mumbai", services: 5, active: true },
+    ]);
 
-    setTimeout(() => {
-      setAgencyData([
-        { id: 1, code: "AG-1001", name: "Acuity Labs", country: "India", location: "Pune", services: 4, active: true },
-        { id: 2, code: "AG-1002", name: "Pathway Diagnostics", country: "India", location: "Chennai", services: 3, active: false },
-        { id: 3, code: "AG-1003", name: "Prime Labs", country: "India", location: "Delhi", services: 5, active: true },
-        { id: 4, code: "AG-1004", name: "Care Labs", country: "India", location: "Hyderabad", services: 2, active: false },
-        { id: 5, code: "AG-1005", name: "Wellness Labs", country: "India", location: "Mumbai", services: 6, active: true },
-        { id: 6, code: "AG-1006", name: "Health Labs", country: "India", location: "Bangalore", services: 2, active: true },
-        { id: 7, code: "AG-1007", name: "Metro Labs", country: "India", location: "Delhi", services: 3, active: false },
-        { id: 8, code: "AG-1008", name: "City Labs", country: "India", location: "Pune", services: 4, active: true },
-        { id: 9, code: "AG-1009", name: "Nova Labs", country: "India", location: "Chennai", services: 2, active: true },
-        { id: 10, code: "AG-1010", name: "Global Labs", country: "India", location: "Hyderabad", services: 1, active: false },
-        { id: 11, code: "AG-1011", name: "Elite Labs", country: "India", location: "Mumbai", services: 5, active: true },
-      ]);
-
-      setLinkingData([
-        { id: 1, clinic: "Apollo Clinic", agencyCount: 4 },
-        { id: 2, clinic: "Fortis", agencyCount: 2 },
-        { id: 3, clinic: "Manipal Hospital", agencyCount: 5 },
-        { id: 4, clinic: "Aster Clinic", agencyCount: 3 },
-        { id: 5, clinic: "Narayana Health", agencyCount: 6 },
-        { id: 6, clinic: "Cloudnine", agencyCount: 2 },
-        { id: 7, clinic: "Columbia Asia", agencyCount: 4 },
-        { id: 8, clinic: "Sakra World", agencyCount: 3 },
-        { id: 9, clinic: "Rainbow Hospital", agencyCount: 5 },
-        { id: 10, clinic: "Motherhood", agencyCount: 2 },
-        { id: 11, clinic: "Medanta", agencyCount: 6 },
-      ]);
-
-      setLoading(false);
-    }, 500);
+    setLinkingData([
+      { id: 1, clinic: "Apollo Clinic", agencyCount: 4 },
+      { id: 2, clinic: "Fortis", agencyCount: 2 },
+      { id: 3, clinic: "Manipal Hospital", agencyCount: 5 },
+      { id: 4, clinic: "Aster Clinic", agencyCount: 3 },
+      { id: 5, clinic: "Narayana Health", agencyCount: 6 },
+      { id: 6, clinic: "Cloudnine", agencyCount: 2 },
+      { id: 7, clinic: "Columbia Asia", agencyCount: 4 },
+      { id: 8, clinic: "Sakra World", agencyCount: 3 },
+      { id: 9, clinic: "Rainbow Hospital", agencyCount: 5 },
+      { id: 10, clinic: "Motherhood", agencyCount: 2 },
+      { id: 11, clinic: "Medanta", agencyCount: 6 },
+    ]);
   }, []);
 
   const filteredAgency = agencyData.filter((a) =>
@@ -78,15 +75,8 @@ const AgencyPage: React.FC = () => {
     l.clinic.toLowerCase().includes(linkingSearch.toLowerCase())
   );
 
-  const agencyTotalPages = Math.max(
-    1,
-    Math.ceil(filteredAgency.length / itemsPerPage)
-  );
-
-  const linkingTotalPages = Math.max(
-    1,
-    Math.ceil(filteredLinking.length / itemsPerPage)
-  );
+  const agencyTotalPages = Math.max(1, Math.ceil(filteredAgency.length / itemsPerPage));
+  const linkingTotalPages = Math.max(1, Math.ceil(filteredLinking.length / itemsPerPage));
 
   const agencyDataPaginated = filteredAgency.slice(
     (agencyPage - 1) * itemsPerPage,
@@ -98,13 +88,8 @@ const AgencyPage: React.FC = () => {
     linkingPage * itemsPerPage
   );
 
-  useEffect(() => {
-    setAgencyPage(1);
-  }, [agencySearch]);
-
-  useEffect(() => {
-    setLinkingPage(1);
-  }, [linkingSearch]);
+  useEffect(() => setAgencyPage(1), [agencySearch]);
+  useEffect(() => setLinkingPage(1), [linkingSearch]);
 
   const toggleStatus = (id: number) => {
     setAgencyData((prev) =>
@@ -116,62 +101,50 @@ const AgencyPage: React.FC = () => {
 
   return (
     <div className="agency-container">
-      {/* Tabs */}
-      <div className="tabs">
-        <div
-          className={`tab ${activeTab === "agency" ? "active" : ""}`}
-          onClick={() => setActiveTab("agency")}
-        >
-          Agency
-        </div>
-
-        <div
-          className={`tab ${activeTab === "linking" ? "active" : ""}`}
-          onClick={() => setActiveTab("linking")}
-        >
-          Agency-Clinic Linking
-        </div>
-      </div>
-
-      {/* Header */}
-      <div className="header-row">
-        <h3>
-          {activeTab === "agency"
-            ? `List of Agency (${filteredAgency.length})`
-            : `Agency-Clinic Linking (${filteredLinking.length})`}
-        </h3>
-
-        <div className="actions">
-          <div className="search-box">
-            <FiSearch />
-            <input
-              placeholder={
-                activeTab === "agency"
-                  ? "Search by code / Name"
-                  : "Search by Clinic"
-              }
-              value={activeTab === "agency" ? agencySearch : linkingSearch}
-              onChange={(e) =>
-                activeTab === "agency"
-                  ? setAgencySearch(e.target.value)
-                  : setLinkingSearch(e.target.value)
-              }
-            />
+      {page === "list" ? (
+        <>
+          
+          <div className="tabs">
+            <div className={`tab ${activeTab === "agency" ? "active" : ""}`} onClick={() => setActiveTab("agency")}>
+              Agency
+            </div>
+            <div className={`tab ${activeTab === "linking" ? "active" : ""}`} onClick={() => setActiveTab("linking")}>
+              Agency-Clinic Linking
+            </div>
           </div>
 
-          {activeTab === "agency" && (
-            <button className="add-btn">
-              <FiPlus /> Add New Agency
-            </button>
-          )}
-        </div>
-      </div>
+          
+          <div className="header-row">
+            <h3>
+              {activeTab === "agency"
+                ? `List of Agency (${filteredAgency.length})`
+                : `Agency-Clinic Linking (${filteredLinking.length})`}
+            </h3>
 
-      {loading ? (
-        <div className="loading">Loading...</div>
-      ) : (
-        <>
-          {/* Table */}
+            <div className="actions">
+              <div className="search-box">
+                <FiSearch />
+                <input
+                  placeholder={activeTab === "agency" ? "Search by Name" : "Search by Clinic"}
+                  value={activeTab === "agency" ? agencySearch : linkingSearch}
+                  onChange={(e) =>
+                    activeTab === "agency"
+                      ? setAgencySearch(e.target.value)
+                      : setLinkingSearch(e.target.value)
+                  }
+                />
+              </div>
+
+              {activeTab === "agency" && (
+                <button className="add-btn" onClick={() => setPage("add")}>
+                  <FiPlus /> Add New Agency
+                </button>
+              )}
+            </div>
+          </div>
+
+          
+          
           <div className="table">
             <div className="table-head">
               {activeTab === "agency" ? (
@@ -192,10 +165,7 @@ const AgencyPage: React.FC = () => {
               )}
             </div>
 
-            {(activeTab === "agency"
-              ? agencyDataPaginated
-              : linkingDataPaginated
-            ).map((item: any) => (
+            {(activeTab === "agency" ? agencyDataPaginated : linkingDataPaginated).map((item: any) => (
               <div className="table-row" key={item.id}>
                 {activeTab === "agency" ? (
                   <>
@@ -206,6 +176,7 @@ const AgencyPage: React.FC = () => {
                     <span>{item.services}</span>
 
                     <div className="status-cell">
+                      
                       <label className="switch">
                         <input
                           type="checkbox"
@@ -215,9 +186,12 @@ const AgencyPage: React.FC = () => {
                         <span className="slider"></span>
                       </label>
 
-                      <button className="edit-btn">
-                        <MdEdit />
-                      </button>
+                      <button
+                     className="edit-btn"
+                    onClick={() => setPage("add")}
+>
+                    <img src={editicon} alt="edit" />
+                    </button>
                     </div>
                   </>
                 ) : (
@@ -226,9 +200,10 @@ const AgencyPage: React.FC = () => {
                     <span>{item.agencyCount}</span>
 
                     <div className="status-cell">
-                      <button className="edit-btn">
-                        <MdEdit />
-                      </button>
+                     <button className="edit-btn">
+  <img src={editicon} alt="edit" />
+</button>
+
                     </div>
                   </>
                 )}
@@ -236,94 +211,39 @@ const AgencyPage: React.FC = () => {
             ))}
           </div>
 
-          {/* Pagination */}
+          {/* pagination */}
           <div className="footer">
-            {activeTab === "agency" ? (
-              <>
-                <span>
-                  Showing {(agencyPage - 1) * itemsPerPage + 1} to{" "}
-                  {Math.min(agencyPage * itemsPerPage, filteredAgency.length)} of{" "}
-                  {filteredAgency.length}
-                </span>
+            <div>
+              Page{" "}
+              {activeTab === "agency" ? agencyPage : linkingPage} of{" "}
+              {activeTab === "agency" ? agencyTotalPages : linkingTotalPages}
+            </div>
 
-                <div className="pagination">
-                  <button
-                    disabled={agencyPage === 1}
-                    onClick={() =>
-                      setAgencyPage((p) => Math.max(p - 1, 1))
-                    }
-                  >
-                    {"<"}
-                  </button>
+            <div className="pagination">
+              <button
+                onClick={() =>
+                  activeTab === "agency"
+                    ? agencyPage > 1 && setAgencyPage(agencyPage - 1)
+                    : linkingPage > 1 && setLinkingPage(linkingPage - 1)
+                }
+              >
+                &lt;
+              </button>
 
-                  {[...Array(agencyTotalPages)].map((_, i) => (
-                    <button
-                      key={i}
-                      className={agencyPage === i + 1 ? "active" : ""}
-                      onClick={() => setAgencyPage(i + 1)}
-                    >
-                      {i + 1}
-                    </button>
-                  ))}
-
-                  <button
-                    disabled={agencyPage === agencyTotalPages}
-                    onClick={() =>
-                      setAgencyPage((p) =>
-                        Math.min(p + 1, agencyTotalPages)
-                      )
-                    }
-                  >
-                    {">"}
-                  </button>
-                </div>
-              </>
-            ) : (
-              <>
-                <span>
-                  Showing {(linkingPage - 1) * itemsPerPage + 1} to{" "}
-                  {Math.min(
-                    linkingPage * itemsPerPage,
-                    filteredLinking.length
-                  )}{" "}
-                  of {filteredLinking.length}
-                </span>
-
-                <div className="pagination">
-                  <button
-                    disabled={linkingPage === 1}
-                    onClick={() =>
-                      setLinkingPage((p) => Math.max(p - 1, 1))
-                    }
-                  >
-                    {"<"}
-                  </button>
-
-                  {[...Array(linkingTotalPages)].map((_, i) => (
-                    <button
-                      key={i}
-                      className={linkingPage === i + 1 ? "active" : ""}
-                      onClick={() => setLinkingPage(i + 1)}
-                    >
-                      {i + 1}
-                    </button>
-                  ))}
-
-                  <button
-                    disabled={linkingPage === linkingTotalPages}
-                    onClick={() =>
-                      setLinkingPage((p) =>
-                        Math.min(p + 1, linkingTotalPages)
-                      )
-                    }
-                  >
-                    {">"}
-                  </button>
-                </div>
-              </>
-            )}
+              <button
+                onClick={() =>
+                  activeTab === "agency"
+                    ? agencyPage < agencyTotalPages && setAgencyPage(agencyPage + 1)
+                    : linkingPage < linkingTotalPages && setLinkingPage(linkingPage + 1)
+                }
+              >
+                &gt;
+              </button>
+            </div>
           </div>
         </>
+      ) : (
+        <AddNewAgency onBack={() => setPage("list")} />
       )}
     </div>
   );

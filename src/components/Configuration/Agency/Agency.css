@@ -3,9 +3,12 @@
   padding: 20px;
   border-radius: 12px;
   font-family: "Inter", sans-serif;
+  
+  font-size: 0.8rem; 
 }
 
-/* Tabs */
+
+
 .tabs {
   display: flex;
   border-bottom: 2px solid #eee;
@@ -23,7 +26,7 @@
   border-bottom: 2px solid #ff5a3c;
 }
 
-/* Header */
+
 .header-row {
   display: flex;
   justify-content: space-between;
@@ -50,7 +53,7 @@
   outline: none;
 }
 
-/* Button */
+
 .add-btn {
   background: #4a4a4a;
   color: #fff;
@@ -63,7 +66,7 @@
   cursor: pointer;
 }
 
-/* Table */
+
 .table {
   background: #fff;
   border-radius: 10px;
@@ -88,7 +91,7 @@
   border-top: 1px solid #eee;
 }
 
-/* Status */
+
 .status-cell {
   display: flex;
   align-items: center;
@@ -97,7 +100,7 @@
 
 .edit-icon {
   font-size: 18px;
-  color: #ff5a3c;
+ 
   cursor: pointer;
 }
 
@@ -105,7 +108,7 @@
   color: #1d4ed8;
 }
 
-/* Toggle */
+
 .switch {
   position: relative;
   width: 36px;
@@ -165,13 +168,13 @@ input:checked + .slider:before {
   border-radius: 6px;
 }
 
-/* 🔥 NEW EDIT BUTTON DESIGN */
+
 .edit-btn {
-  width: 32px;
-  height: 32px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   border: none;
-  background: #eef2ff;
+  
   display: flex;
   align-items: center;
   justify-content: center;
@@ -184,15 +187,15 @@ input:checked + .slider:before {
   font-size: 16px;
 }
 
-.edit-btn:hover {
+/* .edit-btn:hover {
   background: #ff5a3c;
-}
+} */
 
 .edit-btn:hover svg {
   color: #fff;
 }
 
-/* Pagination fix */
+
 .pagination button {
   margin: 0 4px;
   padding: 4px 8px;

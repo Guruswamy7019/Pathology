@@ -1,0 +1,301 @@
+
+
+.add-wrapper {
+  padding: 20px;
+  background: #f6f7f9;
+  min-height: 100vh;
+  font-family: "Inter", sans-serif;
+}
+
+
+.top-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.top-header button {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.top-header h2 {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+
+.stepper {
+  display: flex;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.step {
+  padding: 8px 14px;
+  border-radius: 20px;
+  background: #eee;
+  font-size: 13px;
+  color: #666;
+}
+
+.step.active {
+  background: #e6f4ea;
+  color: #1b7f3a;
+  font-weight: 500;
+}
+
+
+.form-container {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+h4 {
+  margin: 20px 0 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+
+.row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.row input,
+.row select {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 13px;
+}
+
+
+.split {
+  display: flex;
+  gap: 20px;
+}
+
+.split > div {
+  flex: 1;
+}
+
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.tag {
+  background: #eef2f7;
+  padding: 6px 10px;
+  border-radius: 16px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tag button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #888;
+}
+
+
+.contact-box {
+  background: #fafafa;
+  padding: 14px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+
+.contact-box p {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+
+.service-container {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+
+.service-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.service-header span {
+  margin-right: 20px;
+  font-size: 13px;
+  color: #555;
+}
+
+.search {
+  width: 260px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+
+.service-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+
+.service-card {
+  position: relative;
+  background: #f7f8fa;
+  padding: 14px;
+  border-radius: 12px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+
+.remove-btn {
+  position: absolute;
+  left: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  font-size: 14px;
+  color: red;
+  cursor: pointer;
+}
+
+
+.field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.field label {
+  font-size: 11px;
+  color: #888;
+  margin-bottom: 4px;
+}
+
+.field input,
+.field select {
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 13px;
+}
+
+
+.empty-box {
+  border: 2px dashed #3b82f6;
+  border-radius: 10px;
+  height: 70px;
+}
+
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.cancel {
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.save {
+  background: #4b5563;
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+
+
+.split div input {
+  width: 100%;
+  height: 44px;
+  padding: 0 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: "Inter", sans-serif;
+  color: #111827;
+  background-color: #ffffff;
+  outline: none;
+  box-sizing: border-box;
+}
+
+
+.split div input::placeholder {
+  color: #9ca3af;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+
+.split div input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+}
+
+@media (max-width: 900px) {
+  .row {
+    flex-direction: column;
+  }
+
+  .split {
+    flex-direction: column;
+  }
+
+  .service-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .service-header {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .search {
+    width: 100%;
+  }
+}
+
+
+
+
+
