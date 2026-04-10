@@ -9,6 +9,7 @@ import {
   sampleMockData,
   tubeMockData,
 } from "./mockDataSampleTube";
+import CreateSampleModal from "./CreateSampleModal";
 
 type SampleTubeTab = "Sample" | "Tube";
 
@@ -28,22 +29,25 @@ const styles = {
     display: "grid",
     gridTemplateColumns: "1fr 1fr",
     borderBottom: "1px solid #eceef2",
-    backgroundColor: "#fafafa",
+    backgroundColor: "transparent",
   },
   tabButton: {
     padding: "14px 10px",
     border: "none",
-    borderBottom: "2px solid transparent",
+    borderBottom: "2px solid #eceef2",
     background: "transparent",
+    backgroundColor: "transparent",
     color: "#81858d",
     fontSize: "14px",
     fontWeight: 600,
     cursor: "pointer",
+    width: "100%",
+    position: "sticky" as const,
   },
   tabButtonActive: {
     color: "#23262b",
-    borderBottomColor: "#e65245",
-    backgroundColor: "#ffffff",
+    borderBottom: "2px solid #e65245",
+    backgroundColor: "transparent",
   },
   content: {
     display: "flex",
@@ -114,6 +118,7 @@ const styles = {
   },
   tableWrap: {
     border: "1px solid #edf0f4",
+    borderTop: "none",
     borderRadius: "12px",
     overflow: "hidden",
     display: "flex",
@@ -242,6 +247,7 @@ function SampleAndTube() {
   const [currentPage, setCurrentPage] = useState(1);
   const [sampleData, setSampleData] = useState(sampleMockData);
   const [tubeData, setTubeData] = useState(tubeMockData);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const itemsPerPage = 10;
 
@@ -254,13 +260,12 @@ function SampleAndTube() {
       return activeData;
     }
 
-    return activeData.filter((item) => {
-      return (
+    return activeData.filter(
+      (item) =>
         item.code.toLowerCase().includes(query) ||
-        item.name.toLowerCase().includes(query)
-      );
-    });
-  }, [activeData, searchText]);
+        item.name.toLowerCase().includes(query),
+    );
+  }, [searchText, activeData]);
 
   const totalItems = filteredRows.length;
   const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage));
@@ -336,7 +341,11 @@ function SampleAndTube() {
               />
             </div>
 
-            <button type="button" style={styles.createButton}>
+            <button
+              type="button"
+              style={styles.createButton}
+              onClick={() => setIsModalOpen(true)}
+            >
               <img src={AddIcon} alt="add" style={styles.createIcon} />
               {`Create New ${activeTab}`}
             </button>
@@ -472,9 +481,19 @@ function SampleAndTube() {
             </div>
           </div>
         </div>
+
+        {/* STEP 4 — ADD HERE */}
+        <CreateSampleModal
+          isOpen={isModalOpen}
+          type={activeTab}
+          onClose={() => setIsModalOpen(false)}
+          onSave={(code, name) => {
+            console.log(code, name);
+        
+          }}
+        />
       </div>
     </div>
   );
 }
-
 export default SampleAndTube;
