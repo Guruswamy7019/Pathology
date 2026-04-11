@@ -179,16 +179,13 @@ export default function TemplateTable({
 
   const filteredData = useMemo(() => {
     const query = searchText.trim().toLowerCase();
-
     return allData.filter((row) => {
       const matchesSearch =
         !query ||
         row.code.toLowerCase().includes(query) ||
         row.name.toLowerCase().includes(query);
-
       const matchesGender =
         !activeFilters.gender || row.gender === activeFilters.gender;
-
       return matchesSearch && matchesGender;
     });
   }, [allData, activeFilters, searchText]);
@@ -205,24 +202,17 @@ export default function TemplateTable({
     );
   };
 
-  const handleApplyFilters = (filters: FilterValues) => {
-    setActiveFilters(filters);
-  };
-
-  const handleClearFilters = () => {
-    setActiveFilters({ gender: "" });
-  };
-
+  // Figma: Code 18% | Name 36% | No. of Pathologists 10% | Gender 12% | Status 16% | Edit 8%
   const columns: Column<TemplateRow>[] = [
     { key: "code", header: "Template Code", width: "14%" },
-    { key: "name", header: "Template Name", width: "30%" },
-    { key: "noOfPathologists", header: "No. of Pathologist", width: "16%" },
-    { key: "gender", header: "Gender", width: "12%" },
+    { key: "name", header: "Template Name", width: "25%" },
+    { key: "noOfPathologists", header: "No. of Pathologist", width: "17%" },
+    { key: "gender", header: "Gender", width: "30%" },
     {
       key: "status",
       header: "Status",
       align: "right",
-      width: "14%",
+      width: "16%",
       render: (row) => (
         <Toggle checked={row.status} onChange={() => handleToggle(row.code)} />
       ),
@@ -240,6 +230,8 @@ export default function TemplateTable({
             background: "transparent",
             border: "none",
             cursor: "pointer",
+            display: "inline-flex",
+            alignItems: "center",
           }}
         >
           <img src={EditIcon} alt="edit" width={18} height={18} />
@@ -251,12 +243,11 @@ export default function TemplateTable({
   return (
     <>
       <DataTable columns={columns} data={filteredData} />
-
       <FilterModal
         isOpen={filterOpen}
         onClose={() => onFilterClose?.()}
-        onApply={handleApplyFilters}
-        onClearAll={handleClearFilters}
+        onApply={(filters) => setActiveFilters(filters)}
+        onClearAll={() => setActiveFilters({ gender: "" })}
         initialValues={activeFilters}
       />
     </>

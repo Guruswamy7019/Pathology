@@ -9,7 +9,7 @@
   flex-direction: column;
   overflow-y: auto;
   font-family: 'Nunito', sans-serif;
-  font-size: clamp(12px, 1.2vh, 16px);
+  font-size: clamp(14px, 1.5vh, 16px); 
 }
 
 .card {
@@ -71,7 +71,7 @@
 
 .sectionTitle {
   font-family: 'Montserrat', sans-serif;
-  font-size: 0.75em;
+  font-size: 0.8em;
   font-weight: 700;
   color: #7a7a7a;
   text-transform: uppercase;
@@ -113,7 +113,7 @@
   left: 0.75em;
   padding: 0 0.3em;
   background: #fff;
-  font-size: 0.72em;
+  font-size: 0.78em;
   font-weight: 500;
   color: #9e9e9e;
   font-family: 'Noto Sans', sans-serif;
@@ -128,7 +128,7 @@
   padding: 0 0.875em;
   border: none;
   border-radius: 8px;
-  font-size: 0.9em;
+  font-size: 1em;
   font-family: 'Nunito', sans-serif;
   font-weight: 500;
   color: #1a1a1a;
@@ -143,7 +143,7 @@
   padding: 0 2em 0 0.875em;
   border: none;
   border-radius: 8px;
-  font-size: 0.9em;
+  font-size: 1em;
   font-family: 'Nunito', sans-serif;
   font-weight: 500;
   color: #1a1a1a;
@@ -157,7 +157,7 @@
 
 /* Legacy (kept for side panel) */
 .label {
-  font-size: 0.8em;
+  font-size: 0.85em;
   font-weight: 400;
   color: #9e9e9e;
   font-family: 'Noto Sans', sans-serif;
@@ -225,7 +225,7 @@
   left: 0.75em;
   padding: 0 0.3em;
   background: #fff;
-  font-size: 0.72em;
+  font-size: 0.78em;
   font-weight: 500;
   color: #9e9e9e;
   font-family: 'Noto Sans', sans-serif;
@@ -240,7 +240,7 @@
   padding: 0 2.5em 0 0.875em;
   border: none;
   border-radius: 8px;
-  font-size: 0.9em;
+  font-size: 1em;
   font-family: 'Nunito', sans-serif;
   font-weight: 500;
   color: #1a1a1a;
@@ -438,7 +438,7 @@
 .refTable {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.875em;
+  font-size: 0.95em;
   table-layout: auto;
 }
 
@@ -447,7 +447,7 @@
   background: #fafafa;
   color: #7a7a7a;
   font-family: 'Noto Sans', sans-serif;
-  font-size: 0.85em;
+  font-size: 0.9em;
   font-weight: 400;
   text-align: left;
   white-space: nowrap;
@@ -652,7 +652,7 @@
   border: 1px solid #E2E3E5;
   border-radius: 6px;
   background: #F1F1F1;
-  font-size: 1em;
+  font-size: 0.95em;
   font-weight: 600;
   color: #505050;
   cursor: pointer;
@@ -671,7 +671,7 @@
   border-radius: 6px;
   background: #505050;
   color: #fff;
-  font-size: 1em;
+  font-size: 0.95em;
   font-weight: 700;
   cursor: pointer;
   font-family: 'Montserrat', sans-serif;
@@ -689,7 +689,7 @@
   border: 1px solid #E2E3E5;
   border-radius: 6px;
   background: #F1F1F1;
-  font-size: 1em;
+  font-size: 0.95em;
   font-weight: 600;
   color: #505050;
   cursor: pointer;
@@ -709,7 +709,7 @@
   border: 1px solid #E2E3E5;
   border-radius: 6px;
   background: #fff;
-  font-size: 1em;
+  font-size: 0.95em;
   font-weight: 600;
   color: black;
   cursor: pointer;

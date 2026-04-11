@@ -193,7 +193,6 @@ export default function TestTable({
   const filteredData = useMemo(() => {
     const query = searchText.trim().toLowerCase();
     if (!query) return data;
-
     return data.filter(
       (item) =>
         item.code.toLowerCase().includes(query) ||
@@ -215,17 +214,18 @@ export default function TestTable({
     );
   };
 
+  // Figma: Code 16% | Name 10% | Print Name 24% | Category 18% | No. of Param 10% | Status 14% | Edit 8%
   const columns: Column<TestRow>[] = [
-    { key: "code", header: "Test Code", width: "14%" },
-    { key: "name", header: "Test Name", width: "12%" },
-    { key: "printName", header: "Print Name", width: "22%" },
+    { key: "code", header: "Test Code", width: "16%" },
+    { key: "name", header: "Test Name", width: "10%" },
+    { key: "printName", header: "Print Name", width: "24%" },
     { key: "category", header: "Test Category", width: "18%" },
-    { key: "noOfParameter", header: "No. of Parameter", width: "14%" },
+    { key: "noOfParameter", header: "No. of Parameter", width: "30%" },
     {
       key: "status",
       header: "Status",
       align: "right",
-      width: "14%",
+      width: "16%",
       render: (row) => (
         <Toggle checked={row.status} onChange={() => handleToggle(row.code)} />
       ),
@@ -234,7 +234,7 @@ export default function TestTable({
       key: "actions",
       header: "",
       align: "right",
-      width: "6%",
+      width: "7%",
       render: (row) => (
         <button
           type="button"
@@ -243,6 +243,8 @@ export default function TestTable({
             background: "transparent",
             border: "none",
             cursor: "pointer",
+            display: "inline-flex",
+            alignItems: "center",
           }}
         >
           <img src={EditIcon} alt="edit" width={18} height={18} />

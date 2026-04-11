@@ -172,7 +172,6 @@ export default function ParameterTable({
   const filteredData = useMemo(() => {
     const query = searchText.trim().toLowerCase();
     if (!query) return data;
-
     return data.filter(
       (item) =>
         item.code.toLowerCase().includes(query) ||
@@ -194,16 +193,17 @@ export default function ParameterTable({
     );
   };
 
+  // Figma widths: Code 20% | Name 28% | Print Name 22% | Unit 12% | Status 12% | Edit 6%
   const columns: Column<ParameterRow>[] = [
-    { key: "code", header: "Parameter Code", width: "16%" },
-    { key: "name", header: "Parameter Name", width: "22%" },
+    { key: "code", header: "Parameter Code", width: "20%" },
+    { key: "name", header: "Parameter Name", width: "28%" },
     { key: "printName", header: "Parameter Print Name", width: "22%" },
     { key: "unit", header: "Unit", width: "12%" },
     {
       key: "status",
       header: "Status",
       align: "right",
-      width: "14%",
+      width: "12%",
       render: (row) => (
         <Toggle checked={row.status} onChange={() => handleToggle(row.code)} />
       ),
@@ -221,6 +221,8 @@ export default function ParameterTable({
             background: "transparent",
             border: "none",
             cursor: "pointer",
+            display: "inline-flex",
+            alignItems: "center",
           }}
         >
           <img src={EditIcon} alt="edit" width={18} height={18} />

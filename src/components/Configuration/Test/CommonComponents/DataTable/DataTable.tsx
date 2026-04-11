@@ -129,60 +129,75 @@ export default function DataTable<T extends { [key: string]: unknown }>({
   data,
   itemsPerPage: fixedItemsPerPage,
 }: DataTableProps<T>) {
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const [dynamicItemsPerPage, setDynamicItemsPerPage] = useState(10);
+  const tableWrapperRef = useRef<HTMLDivElement>(null);
+  const tableRef = useRef<HTMLTableElement>(null);
+
+  const [rowHeight, setRowHeight] = useState(44);
   const [currentPage, setCurrentPage] = useState(1);
 
-  useEffect(() => {
-    if (fixedItemsPerPage) return;
-
-    const calculateRows = () => {
-      if (!wrapperRef.current) return;
-
-      const availableHeight = wrapperRef.current.getBoundingClientRect().height;
-      const header = wrapperRef.current.querySelector("thead");
-      const footer = wrapperRef.current.querySelector(`.${tableStyles.footer}`);
-      const firstRow = wrapperRef.current.querySelector("tbody tr");
-
-      const headerH = header?.getBoundingClientRect().height ?? 49;
-      const footerH = footer?.getBoundingClientRect().height ?? 56;
-      const rowH = firstRow?.getBoundingClientRect().height ?? 55;
-
-      const BUFFER = 20;
-
-      const rowsAvailable = Math.floor(
-        (availableHeight - headerH - footerH - BUFFER) / rowH,
-      );
-
-      setDynamicItemsPerPage(Math.max(1, rowsAvailable));
-      setCurrentPage(1);
-    };
-
-    const observer = new ResizeObserver(calculateRows);
-    if (wrapperRef.current) observer.observe(wrapperRef.current);
-    return () => observer.disconnect();
-  }, [fixedItemsPerPage]);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [data]);
-
-  const itemsPerPage = fixedItemsPerPage ?? dynamicItemsPerPage;
+  const itemsPerPage = fixedItemsPerPage ?? 10;
   const totalItems = data.length;
   const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage));
   const startEntry =
     totalItems === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1;
   const endEntry = Math.min(currentPage * itemsPerPage, totalItems);
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [data, itemsPerPage]);
+
+  useEffect(() => {
+    const calculateRowHeight = () => {
+      if (!tableWrapperRef.current || !tableRef.current) return;
+
+      const wrapperHeight =
+        tableWrapperRef.current.getBoundingClientRect().height;
+      const thead = tableRef.current.querySelector("thead");
+      const headerHeight = thead?.getBoundingClientRect().height ?? 48;
+
+      // tableWrapper already excludes footer because footer is outside it
+      const availableBodyHeight = wrapperHeight - headerHeight;
+
+      // small safety adjustment for borders / rounding
+      const safeHeight = availableBodyHeight - 6;
+
+      const nextRowHeight = Math.floor(safeHeight / 10);
+
+      setRowHeight(Math.max(36, nextRowHeight));
+    };
+
+    calculateRowHeight();
+
+    const observer = new ResizeObserver(calculateRowHeight);
+
+    if (tableWrapperRef.current) observer.observe(tableWrapperRef.current);
+    if (tableRef.current) observer.observe(tableRef.current);
+
+    window.addEventListener("resize", calculateRowHeight);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", calculateRowHeight);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [currentPage, totalPages]);
+
   const currentRows = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     return data.slice(startIndex, startIndex + itemsPerPage);
   }, [data, currentPage, itemsPerPage]);
 
+  const emptyRowsCount = Math.max(0, itemsPerPage - currentRows.length);
+
   return (
-    <div className={tableStyles.wrapper} ref={wrapperRef}>
-      <div className={tableStyles.tableWrapper}>
-        <table className={tableStyles.table}>
+    <div className={tableStyles.wrapper}>
+      <div className={tableStyles.tableWrapper} ref={tableWrapperRef}>
+        <table className={tableStyles.table} ref={tableRef}>
           <thead className={tableStyles.head}>
             <tr>
               {columns.map((col) => (
@@ -195,6 +210,7 @@ export default function DataTable<T extends { [key: string]: unknown }>({
               ))}
             </tr>
           </thead>
+
           <tbody>
             {currentRows.map((row, rowIndex) => (
               <tr
@@ -204,12 +220,28 @@ export default function DataTable<T extends { [key: string]: unknown }>({
                 {columns.map((col) => (
                   <td
                     key={String(col.key)}
-                    style={{ textAlign: col.align ?? "left" }}
+                    style={{
+                      textAlign: col.align ?? "left",
+                      height: `${rowHeight}px`,
+                    }}
                   >
                     {col.render
                       ? col.render(row)
                       : (row[col.key as keyof T] as React.ReactNode)}
                   </td>
+                ))}
+              </tr>
+            ))}
+
+            {Array.from({ length: emptyRowsCount }).map((_, rowIndex) => (
+              <tr key={`empty-row-${rowIndex}`} className={tableStyles.row}>
+                {columns.map((col) => (
+                  <td
+                    key={`empty-${String(col.key)}-${rowIndex}`}
+                    style={{
+                      height: `${rowHeight}px`,
+                    }}
+                  ></td>
                 ))}
               </tr>
             ))}
