@@ -195,10 +195,10 @@ export default function ParameterTable({
 
   // Figma widths: Code 20% | Name 28% | Print Name 22% | Unit 12% | Status 12% | Edit 6%
   const columns: Column<ParameterRow>[] = [
-    { key: "code", header: "Parameter Code", width: "20%" },
-    { key: "name", header: "Parameter Name", width: "28%" },
-    { key: "printName", header: "Parameter Print Name", width: "22%" },
-    { key: "unit", header: "Unit", width: "12%" },
+    { key: "code", header: "Parameter Code", width: "18%" },
+    { key: "name", header: "Parameter Name", width: "26%" },
+    { key: "printName", header: "Parameter Print Name", width: "20%" },
+    { key: "unit", header: "Unit", width: "40%" },
     {
       key: "status",
       header: "Status",
@@ -212,7 +212,7 @@ export default function ParameterTable({
       key: "actions",
       header: "",
       align: "right",
-      width: "6%",
+      width: "7%",
       render: (row) => (
         <button
           type="button"

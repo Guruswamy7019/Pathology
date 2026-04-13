@@ -301,13 +301,17 @@ tbody tr:first-child td {
 .tab {
   flex: 1;
   color: #BBBBBB;
-  font-size: 1.05em;
+  font-size: 1.15em;
   line-height: 1.375em;
   font-weight: 500;
   cursor: pointer;
   padding: 0.75em 1em;
   position: relative;
   text-align: center;
+}
+
+.tab:not(.activeTab):hover {
+  color: #E17C64;
 }
 
 .activeTab {

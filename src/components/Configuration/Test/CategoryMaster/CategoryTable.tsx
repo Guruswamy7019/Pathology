@@ -45,9 +45,9 @@ export default function CategoryTable({
 
   // Figma: Code 20% | Name 44% | No. of Tests 14% | Status 16% | Edit 6%
   const columns: Column<CategoryRow>[] = [
-    { key: "code", header: "Category Code", width: "20%" },
-    { key: "name", header: "Category Name", width: "44%" },
-    { key: "tests", header: "No. of Tests", width: "14%" },
+    { key: "code", header: "Category Code", width: "15%" },
+    { key: "name", header: "Category Name", width: "19%" },
+    { key: "tests", header: "No. of Tests", width: "50%" },
     {
       key: "status",
       header: "Status",
