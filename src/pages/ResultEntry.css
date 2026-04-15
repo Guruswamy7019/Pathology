@@ -1,0 +1,188 @@
+.result-container {
+  background: #f6f7fb;
+  padding: 20px;
+  border-radius: 12px;
+  font-family: "Inter", sans-serif;
+}
+
+/* HEADER */
+.result-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.result-header h3 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2b2f38;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* SEARCH */
+.search-box {
+  display: flex;
+  align-items: center;
+  background: white;
+  border: 1px solid #e2e6ef;
+  padding: 6px 10px;
+  border-radius: 8px;
+  width: 260px;
+}
+
+.search-box input {
+  border: none;
+  outline: none;
+  font-size: 13px;
+  width: 100%;
+}
+
+.search-box svg {
+  margin-right: 6px;
+  color: #9aa3b2;
+}
+
+/* FILTER BUTTON */
+.filter-btn {
+  background: white;
+  border: 1px solid #e2e6ef;
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* TABLE */
+.table {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.table-head,
+.table-row {
+  display: grid;
+  grid-template-columns: 1.5fr 2fr 1fr 1.5fr 1.5fr 1fr 1.5fr 0.8fr;
+  padding: 12px;
+  align-items: center;
+}
+
+.table-head {
+  font-size: 12px;
+  color: #8a94a6;
+  border-bottom: 1px solid #eef1f6;
+}
+
+.table-row {
+  font-size: 13px;
+  border-bottom: 1px solid #f1f3f8;
+}
+
+.table-row p {
+  margin: 0;
+  font-weight: 500;
+}
+
+.table-row small {
+  color: #8a94a6;
+}
+
+.bill {
+  color: #ff8c42;
+}
+
+/* STATUS */
+.status {
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+
+.pending {
+  background: #fff4e5;
+  color: #f59e0b;
+}
+
+.complete {
+  background: #e6f7ee;
+  color: #16a34a;
+}
+
+/* ICON */
+.result-icon {
+  display: flex;
+  justify-content: center;
+}
+
+.result-icon svg {
+  color: #3b82f6;
+}
+
+/* PAGINATION */
+.pagination {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16px;
+  gap: 6px;
+}
+
+.pagination button {
+  border: 1px solid #e5e7eb;
+  background: white;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.pagination .active {
+  background: #111827;
+  color: white;
+}
+
+/* FILTER MODAL */
+.filter-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.filter-modal {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  width: 260px;
+}
+
+.filter-modal select {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 12px;
+}
+
+.filter-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.filter-actions .clear {
+  background: #f3f4f6;
+  border: none;
+  padding: 6px 12px;
+}
+
+.filter-actions .apply {
+  background: #111827;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+}
