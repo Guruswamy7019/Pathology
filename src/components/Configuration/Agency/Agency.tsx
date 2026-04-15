@@ -67,9 +67,16 @@ const AgencyPage: React.FC = () => {
     ]);
   }, []);
 
-  const filteredAgency = agencyData.filter((a) =>
-    a.name.toLowerCase().includes(agencySearch.toLowerCase())
+  const filteredAgency = agencyData.filter((a) => {
+  const search = agencySearch.toLowerCase();
+
+  return (
+    a.name.toLowerCase().includes(search) ||
+    a.code.toLowerCase().includes(search) ||
+    a.country.toLowerCase().includes(search) ||
+    a.location.toLowerCase().includes(search)
   );
+});
 
   const filteredLinking = linkingData.filter((l) =>
     l.clinic.toLowerCase().includes(linkingSearch.toLowerCase())
@@ -125,7 +132,11 @@ const AgencyPage: React.FC = () => {
               <div className="search-box">
                 <FiSearch />
                 <input
-                  placeholder={activeTab === "agency" ? "Search by Name" : "Search by Clinic"}
+                  placeholder={
+  activeTab === "agency"
+    ? "Search by Code, Name, Country, City"
+    : "Search by Clinic"
+}
                   value={activeTab === "agency" ? agencySearch : linkingSearch}
                   onChange={(e) =>
                     activeTab === "agency"
@@ -211,36 +222,92 @@ const AgencyPage: React.FC = () => {
             ))}
           </div>
 
-          {/* pagination */}
-          <div className="footer">
-            <div>
-              Page{" "}
-              {activeTab === "agency" ? agencyPage : linkingPage} of{" "}
-              {activeTab === "agency" ? agencyTotalPages : linkingTotalPages}
-            </div>
+         <div className="footer">
+  
+  <div className="page-info">
+    {(() => {
+      const currentPage =
+        activeTab === "agency" ? agencyPage : linkingPage;
 
-            <div className="pagination">
-              <button
-                onClick={() =>
-                  activeTab === "agency"
-                    ? agencyPage > 1 && setAgencyPage(agencyPage - 1)
-                    : linkingPage > 1 && setLinkingPage(linkingPage - 1)
-                }
-              >
-                &lt;
-              </button>
+      const totalItems =
+        activeTab === "agency"
+          ? agencyData.length
+          : linkingData.length;
 
-              <button
-                onClick={() =>
-                  activeTab === "agency"
-                    ? agencyPage < agencyTotalPages && setAgencyPage(agencyPage + 1)
-                    : linkingPage < linkingTotalPages && setLinkingPage(linkingPage + 1)
-                }
-              >
-                &gt;
-              </button>
-            </div>
-          </div>
+      const itemsPerPage = 10;
+
+      const start = (currentPage - 1) * itemsPerPage + 1;
+      const end = Math.min(currentPage * itemsPerPage, totalItems);
+
+      return `Showing ${start} to ${end} of ${totalItems} entries`;
+    })()}
+  </div>
+
+  
+  <div className="pagination">
+    
+    <button
+      className="nav-btn"
+      disabled={
+        activeTab === "agency"
+          ? agencyPage === 1
+          : linkingPage === 1
+      }
+      onClick={() =>
+        activeTab === "agency"
+          ? setAgencyPage(agencyPage - 1)
+          : setLinkingPage(linkingPage - 1)
+      }
+    >
+      ‹
+    </button>
+
+   
+    {Array.from({
+      length:
+        activeTab === "agency"
+          ? agencyTotalPages
+          : linkingTotalPages,
+    }).map((_, index) => {
+      const pageNumber = index + 1;
+      const currentPage =
+        activeTab === "agency" ? agencyPage : linkingPage;
+
+      return (
+        <button
+          key={pageNumber}
+          className={`page-btn ${
+            currentPage === pageNumber ? "active" : ""
+          }`}
+          onClick={() =>
+            activeTab === "agency"
+              ? setAgencyPage(pageNumber)
+              : setLinkingPage(pageNumber)
+          }
+        >
+          {pageNumber}
+        </button>
+      );
+    })}
+
+    
+    <button
+      className="nav-btn"
+      disabled={
+        activeTab === "agency"
+          ? agencyPage === agencyTotalPages
+          : linkingPage === linkingTotalPages
+      }
+      onClick={() =>
+        activeTab === "agency"
+          ? setAgencyPage(agencyPage + 1)
+          : setLinkingPage(linkingPage + 1)
+      }
+    >
+      ›
+    </button>
+  </div>
+</div>
         </>
       ) : (
         <AddNewAgency onBack={() => setPage("list")} />

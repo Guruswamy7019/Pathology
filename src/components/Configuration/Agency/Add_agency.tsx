@@ -16,6 +16,30 @@ interface Service {
 const AddNewAgency: React.FC<Props> = ({ onBack }) => {
   const [step, setStep] = useState(1);
 
+  
+  const [agencyData, setAgencyData] = useState({
+    code: "",
+    name: "",
+    pinCode: "",
+    field1: "",
+    field2: "",
+    field3: "",
+    contact1Name: "",
+    contact1Phone: "",
+    contact1Email: "",
+    contact2Name: "",
+    contact2Phone: "",
+    contact2Email: "",
+  });
+
+  const handleChange = (e: any) => {
+    const { name, value } = e.target;
+    setAgencyData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   const [clinics, setClinics] = useState([
     "Crysta IVF, Bangalore",
     "Sindh IVF, Punjab",
@@ -29,12 +53,6 @@ const AddNewAgency: React.FC<Props> = ({ onBack }) => {
 
   const [services, setServices] = useState<Service[]>([
     { id: 1, name: "Air Culture Sensitivity - Sarjapur", rate: "421.00" },
-    { id: 2, name: "Breeze Health Awareness - Green", rate: "450.00" },
-    { id: 2, name: "Breeze Health Awareness - Green", rate: "450.00" },
-    { id: 2, name: "Breeze Health Awareness - Green", rate: "450.00" },
-    { id: 2, name: "Breeze Health Awareness - Green", rate: "450.00" },
-    { id: 2, name: "Breeze Health Awareness - Green", rate: "450.00" },
-    { id: 2, name: "Breeze Health Awareness - Green", rate: "450.00" },
     { id: 2, name: "Breeze Health Awareness - Green", rate: "450.00" },
   ]);
 
@@ -89,29 +107,22 @@ const AddNewAgency: React.FC<Props> = ({ onBack }) => {
 
   const handleSave = () => {
     const payload = {
-      agency: {
-        code: "AG-4512",
-        name: "Acuity-Labs",
-      },
+      agency: agencyData,
       services: services,
     };
 
     console.log("FINAL DATA 👉", payload);
-    alert("Agency Saved Successfully ✅");
   };
 
   return (
     <div className="add-wrapper">
-
-      
       <div className="top-header">
-       <button className="edit-btn" onClick={onBack}>
-  <img src={back_icon} alt="back" />
-</button>
+        <button className="edit-btn" onClick={onBack}>
+          <img src={back_icon} alt="back" />
+        </button>
         <h2>Add New Agency</h2>
       </div>
 
-      
       <div className="stepper">
         <div className={`step ${step === 1 ? "active" : ""}`}>
           1 Agency Details
@@ -121,28 +132,76 @@ const AddNewAgency: React.FC<Props> = ({ onBack }) => {
         </div>
       </div>
 
-      
+     
       {step === 1 && (
         <div className="form-container">
-
           <h4>BASIC DETAILS</h4>
 
           <div className="row">
-            <input placeholder="Agency Code" defaultValue="AG-4512" />
-            <input placeholder="Agency Name" defaultValue="Acuity-Labs" />
+            <input
+              name="code"
+              placeholder="Agency Code"
+              value={agencyData.code}
+              onChange={handleChange}
+            />
+            <input
+              name="name"
+              placeholder="Agency Name"
+              value={agencyData.name}
+              onChange={handleChange}
+            />
           </div>
 
           <div className="row">
-            <select><option>India</option></select>
-            <select><option>Maharashtra</option></select>
-            <select><option>Pune</option></select>
-            <input placeholder="Pin Code" defaultValue="411002" />
+            <select name="country" onChange={handleChange}>
+  <option value="">Select Country</option>
+  <option value="India">India</option>
+  <option value="USA">USA</option>
+  <option value="UK">UK</option>
+</select>
+
+<select name="state" onChange={handleChange}>
+  <option value="">Select State</option>
+  <option value="Karnataka">Karnataka</option>
+  <option value="Tamil Nadu">Tamil Nadu</option>
+  <option value="Maharashtra">Maharashtra</option>
+  <option value="Delhi">Delhi</option>
+</select>
+
+<select name="city" onChange={handleChange}>
+  <option value="">Select City</option>
+  <option value="Bangalore">Bangalore</option>
+  <option value="Chennai">Chennai</option>
+  <option value="Mumbai">Mumbai</option>
+  <option value="Delhi">Delhi</option>
+</select>
+            <input
+              name="pinCode"
+              placeholder="Pin Code"
+              value={agencyData.pinCode}
+              onChange={handleChange}
+            />
           </div>
 
           <div className="row">
-            <input defaultValue="35, Main Street" />
-            <input defaultValue="Ashok Nagar Road" />
-            <input defaultValue="Shivajinagar" />
+            <input
+              name="field1"
+               placeholder="Address Line 1"
+              value={agencyData.field1}
+              onChange={handleChange}
+            />
+            <input
+              name="field2"
+               placeholder="Address Line 2"
+              value={agencyData.field2}
+              onChange={handleChange}
+            />
+            <input
+              name="field3"
+               placeholder="Address Line 3"
+              value={agencyData.field3}
+              onChange={handleChange}
+            />
           </div>
 
           <div className="split">
@@ -180,23 +239,64 @@ const AddNewAgency: React.FC<Props> = ({ onBack }) => {
           <div className="contact-box">
             <p>CONTACT PERSON 1</p>
             <div className="row">
-              <input defaultValue="Emilia Clarke" />
-              <input defaultValue="+91 45121 21542" />
-              <input defaultValue="emilia.clarke45@gmail.com" />
+              <input
+                name="contact1Name"
+                placeholder="Name"
+                value={agencyData.contact1Name}
+                onChange={handleChange}
+              />
+              <input
+                name="contact1Phone"
+                placeholder="Phone Number"
+                value={agencyData.contact1Phone}
+                onChange={handleChange}
+              />
+              <input
+                name="contact1Email"
+                placeholder="Email Address"
+                value={agencyData.contact1Email}
+                onChange={handleChange}
+              />
             </div>
           </div>
 
+          <div className="contact-box">
+            <p>CONTACT PERSON 2</p>
+            <div className="row">
+              <input
+                name="contact2Name"
+                placeholder="Name"
+                value={agencyData.contact2Name}
+                onChange={handleChange}
+              />
+              <input
+                name="contact2Phone"
+                placeholder="Phone Number"
+                value={agencyData.contact2Phone}
+                onChange={handleChange}
+              />
+              <input
+                name="contact2Email"
+                placeholder="Email Address"
+                value={agencyData.contact2Email}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
         </div>
       )}
 
       
       {step === 2 && (
         <div className="service-container">
-
           <div className="service-header">
             <div>
-              <span>Agency Code: <b>AG-4512</b></span>
-              <span>Agency Name: <b>Acuity-Labs</b></span>
+              <span>
+                Agency Code: <b>{agencyData.code || "-"}</b>
+              </span>
+              <span>
+                Agency Name: <b>{agencyData.name || "-"}</b>
+              </span>
             </div>
 
             <div className="search-wrapper">
@@ -228,7 +328,6 @@ const AddNewAgency: React.FC<Props> = ({ onBack }) => {
           <div className="service-grid">
             {services.map((s) => (
               <div key={s.id} className="service-card">
-
                 <button
                   className="remove-btn"
                   onClick={() => removeService(s.id)}
@@ -247,23 +346,19 @@ const AddNewAgency: React.FC<Props> = ({ onBack }) => {
                   <label>Rate ($)</label>
                   <input
                     value={s.rate}
-                    onChange={(e) =>
-                      updateRate(s.id, e.target.value)
-                    }
+                    onChange={(e) => updateRate(s.id, e.target.value)}
                   />
                 </div>
-
               </div>
             ))}
-
-            <div className="empty-box"></div>
           </div>
         </div>
       )}
 
-     
       <div className="footer">
-        <button className="cancel" onClick={onBack}>Cancel</button>
+        <button className="cancel" onClick={onBack}>
+          Cancel
+        </button>
 
         {step === 1 ? (
           <button className="save" onClick={() => setStep(2)}>
@@ -275,9 +370,9 @@ const AddNewAgency: React.FC<Props> = ({ onBack }) => {
           </button>
         )}
       </div>
-
     </div>
   );
 };
 
 export default AddNewAgency;
+  
