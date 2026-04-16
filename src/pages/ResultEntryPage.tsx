@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import "./ResultEntry.css";
 import { FiSearch, FiPlus } from "react-icons/fi";
-import { HiOutlineFilter } from "react-icons/hi";
+ import { HiOutlineFilter } from "react-icons/hi";
 import { FaRegFileAlt } from "react-icons/fa";
+ 
+
 
 interface Result {
   id: number;
@@ -23,6 +25,9 @@ const ResultEntry = () => {
   const [statusFilter, setStatusFilter] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
 
+  
+  const [activeBill, setActiveBill] = useState<number | null>(null);
+
   const itemsPerPage = 10;
 
   const data: Result[] = Array.from({ length: 35 }, (_, i) => ({
@@ -38,7 +43,6 @@ const ResultEntry = () => {
     status: i % 3 === 0 ? "Pending" : "Complete",
   }));
 
-  // 🔍 SEARCH + FILTER
   const filteredData = data.filter((item) => {
     const searchText = search.toLowerCase();
 
@@ -52,7 +56,6 @@ const ResultEntry = () => {
     return matchesSearch && matchesFilter;
   });
 
-  // 📄 PAGINATION
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
 
   const paginatedData = filteredData.slice(
@@ -61,8 +64,10 @@ const ResultEntry = () => {
   );
 
   return (
-    <div className="result-container">
-      {/* HEADER */}
+    <div
+      className="result-container"
+      onClick={() => setActiveBill(null)} 
+    >
       <div className="result-header">
         <h3>Result Entry List ({filteredData.length})</h3>
 
@@ -88,7 +93,7 @@ const ResultEntry = () => {
         </div>
       </div>
 
-      {/* FILTER MODAL */}
+      
       {filterOpen && (
         <div
           className="filter-overlay"
@@ -131,7 +136,7 @@ const ResultEntry = () => {
         </div>
       )}
 
-      {/* TABLE */}
+      
       <div className="table">
         <div className="table-head">
           <span>Order Date | Time</span>
@@ -159,7 +164,29 @@ const ResultEntry = () => {
             <span>{item.type}</span>
             <span>{item.doctor}</span>
 
-            <span className="bill">ⓘ {item.bill}</span>
+           
+            <span
+              className="bill"
+              onClick={(e) => {
+                e.stopPropagation();
+                setActiveBill(item.id);
+              }}
+            >
+              ⓘ {item.bill}
+
+              
+              {activeBill === item.id && (
+                <div className="bill-tooltip">
+                  <p>
+                    Net Amt. : <strong>$5463.0</strong>
+                  </p>
+                  <p>
+                    Status :
+                    <span className="paid">Paid</span>
+                  </p>
+                </div>
+              )}
+            </span>
 
             <span>{item.orders}</span>
 
@@ -180,7 +207,7 @@ const ResultEntry = () => {
         ))}
       </div>
 
-      {/* PAGINATION */}
+      
       <div className="pagination">
         <button
           disabled={currentPage === 1}
