@@ -66,7 +66,7 @@ export const PATHOLOGY_MENU: MenuItem[] = [
         key: "machine",
         label: "Machine",
         path: "/pathology/configuration/machine",
-        page: lazy(() => import("../components/Configuration/Machine/Machine")),
+        page: lazy(() => import("../components/Configuration/Machine/MachineDashboard")),
       },
       {
         key: "agency",
