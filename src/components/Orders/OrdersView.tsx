@@ -802,56 +802,65 @@ export default function OrdersView() {
             </tr>
           </thead>
           <tbody className={styles.scrollBody}>
-            {pageRows.map((row) => (
-              <tr key={row.id} className={styles.row}>
-                <td>
-                  <div className={styles.dateCell}>
-                    <span className={styles.dateText}>{row.date}</span>
-                    <span className={styles.timeText}>{row.time}</span>
-                  </div>
-                </td>
-                <td>
-                  <div className={styles.patientCell}>
-                    <span className={styles.patientName}>
-                      {row.patientName} | {row.patientAge}
-                    </span>
-                    <span className={styles.patientSub}>
-                      {row.mrn} | {row.gender}
-                    </span>
-                  </div>
-                </td>
-                <td>{row.patientType}</td>
-                <td>{row.doctorName}</td>
-                <td>
-                  <BillTooltip
-                    billNo={row.billNo}
-                    netAmt={row.netAmt}
-                    billStatus={row.billStatus}
-                  />
-                </td>
-                <td>{row.totalTests}</td>
-                <td style={{ textAlign: "right" }}>
-                  <StatusBadge status={row.orderStatus} />
-                </td>
-                <td style={{ textAlign: "right", paddingRight: "1em" }}>
-                  <button className={styles.viewBtn} title="View Order">
-                    <svg
-                      width="18"
-                      height="18"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="#9e9e9e"
-                      strokeWidth="1.8"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <circle cx="12" cy="12" r="3" />
-                      <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7z" />
-                    </svg>
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {Array.from({ length: PAGE_SIZE }, (_, i) => {
+              const row = pageRows[i];
+              return row ? (
+                <tr key={row.id} className={styles.row}>
+                  <td>
+                    <div className={styles.dateCell}>
+                      <span className={styles.dateText}>{row.date}</span>
+                      <span className={styles.timeText}>{row.time}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div className={styles.patientCell}>
+                      <span className={styles.patientName}>
+                        {row.patientName} | {row.patientAge}
+                      </span>
+                      <span className={styles.patientSub}>
+                        {row.mrn} | {row.gender}
+                      </span>
+                    </div>
+                  </td>
+                  <td>{row.patientType}</td>
+                  <td>{row.doctorName}</td>
+                  <td>
+                    <BillTooltip
+                      billNo={row.billNo}
+                      netAmt={row.netAmt}
+                      billStatus={row.billStatus}
+                    />
+                  </td>
+                  <td>{row.totalTests}</td>
+                  <td style={{ textAlign: "right" }}>
+                    <StatusBadge status={row.orderStatus} />
+                  </td>
+                  <td style={{ textAlign: "right", paddingRight: "1em" }}>
+                    <button className={styles.viewBtn} title="View Order">
+                      <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="#9e9e9e"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <circle cx="12" cy="12" r="3" />
+                        <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7z" />
+                      </svg>
+                    </button>
+                  </td>
+                </tr>
+              ) : (
+                <tr key={`empty-${i}`} className={styles.row}>
+                  {Array.from({ length: 8 }, (_, j) => (
+                    <td key={j} />
+                  ))}
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

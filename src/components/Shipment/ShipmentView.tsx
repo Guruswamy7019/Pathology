@@ -98,8 +98,8 @@ const ShipmentView: React.FC = () => {
 
       const matchesSearch = pName.includes(query) || sNo.includes(query) || tName.includes(query);
 
-      const matchesFromDate = appliedFilters.fromDate ? true : true; // Simplified for demo
-      const matchesToDate = appliedFilters.toDate ? true : true; // Simplified for demo
+      // const matchesFromDate = appliedFilters.fromDate ? true : true; // Simplified for demo
+      // const matchesToDate = appliedFilters.toDate ? true : true; // Simplified for demo
 
       if (activeTab === "activity") {
         const matchesShipFrom = appliedFilters.shipFrom ? item.shipFrom.toLowerCase().includes(appliedFilters.shipFrom.toLowerCase()) : true;
