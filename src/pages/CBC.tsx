@@ -3,6 +3,7 @@ import "./CBC.css";
 // import { Result } from "./types";
 import { Result } from "./types";
 
+import Chromosome from "./Chromosome";
 
 import Ellipse_12 from "../assets/icons/Ellipse_12.svg";
 
@@ -32,7 +33,9 @@ const previousResults: Record<string, { date: string; param: string; value: stri
 };
 
 const CBC: React.FC<Props> = ({ onBack, data }) => {
+  
   const [isEdit, setIsEdit] = useState(true);
+  const [activeTab, setActiveTab] = useState("");
   const [modalParam, setModalParam] = useState<string | null>(null);
 
   const testTabs = [
@@ -257,7 +260,14 @@ const CBC: React.FC<Props> = ({ onBack, data }) => {
         </td>
       </tr>
     ));
-
+if (activeTab === "Y Chromosome Microdeletion") {
+  return (
+    <Chromosome
+      onBack={() => setActiveTab("")}
+      data={data}
+    />
+  );
+}
  
   if (isEdit) {
     return (
@@ -309,10 +319,21 @@ const CBC: React.FC<Props> = ({ onBack, data }) => {
           <div className="cbc-main">
             <div className="cbc-tabs">
               {testTabs.map((tab, i) => (
-                <button key={i} className={`cbc-tab ${tab === "(CBC) Complete Blood Count" ? "active" : ""}`}>
-                  {tab}
-                </button>
-              ))}
+  <button
+    key={i}
+    className={`cbc-tab ${
+      tab === "(CBC) Complete Blood Count" ? "active" : ""
+    }`}
+    onClick={() => {
+      if (tab === "Y Chromosome Microdeletion") {
+        setActiveTab(tab); 
+      }
+    }}
+  >
+    {tab}
+  </button>
+))}
+              
             </div>
 
             <div className="cbc-table-wrap">
