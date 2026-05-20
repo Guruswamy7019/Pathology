@@ -6,6 +6,7 @@ import { Result } from "./types";
 import Chromosome from "./Chromosome";
 
 import Ellipse_12 from "../assets/icons/Ellipse_12.svg";
+import back_icon from "../assets/icons/back_icon.svg";
 
 
 
@@ -275,7 +276,9 @@ if (activeTab === "Y Chromosome Microdeletion") {
         {modalParam && <PreviousModal />}
 
         <div className="cbc-header">
-          <button className="back-btn" onClick={onBack}>&#8634;</button>
+          <button className="" onClick={onBack}>
+    <img src={back_icon} alt="back" />
+    </button>
           <h2>Add Result Details</h2>
         </div>
 

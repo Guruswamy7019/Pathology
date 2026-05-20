@@ -1,6 +1,9 @@
 import { useState } from "react";
 import "./Chromosome.css";
 import { Result } from "./types";
+// import back_icon from "../../../assets/icons/back_icon.svg";
+import back_icon from "../assets/icons/back_icon.svg";
+import Ellipse_12 from "../assets/icons/Ellipse_12.svg";
 
 interface Props {
   onBack: () => void;
@@ -119,14 +122,17 @@ const [isSaved, setIsSaved] = useState(false);
     <div className="container">
 
       
-      <div className="header">
-        <button onClick={onBack}>←</button>
-        <h2>Add Result Details</h2>
-      </div>
+     <div className="header">
+  <button className="" onClick={onBack}>
+    <img src={back_icon} alt="back" />
+  </button>
+  
+  <h2>Add Result Details</h2>
+</div>
 
       
       <div className="patient-row">
-        <img src="https://i.pravatar.cc/50" />
+        <img src={Ellipse_12} alt="profile" />
         <div><span>Patient Name</span><p>{data.patient}</p></div>
         <div><span>Age</span><p>27 Years</p></div>
         <div><span>Sex Assigned At Birth</span><p>Female</p></div>

@@ -78,13 +78,15 @@
 }
 
 .table-row {
-  font-size: 13px;
+  font-size: 12px;
   border-bottom: 1px solid #f1f3f8;
+  
 }
 
 .table-row p {
   margin: 0;
   font-weight: 500;
+  
 }
 
 .table-row small {
@@ -98,20 +100,34 @@
 
 .status {
   padding: 3px 10px;
-  border-radius: 20px;
+  border-radius: 50%;
   font-size: 12px;
 }
+
+.pending,
+.complete {
+  display: inline-block;      
+  border-radius: 15px;
+  font-size: 11px;
+  font-weight: 500;
+  width: fit-content;         
+}
+
+
+
 
 .pending {
   background: #fff4e5;
   color: #f59e0b;
+ 
 }
+
 
 .complete {
   background: #e6f7ee;
   color: #16a34a;
+ 
 }
-
 
 .result-icon {
   display: flex;
